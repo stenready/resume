@@ -4,7 +4,7 @@
 @use "vars" as *;
 @use "mixins" as *;
 
-@forward "../../node_modules/modern-normalize/modern-normalize.css";
+@import "modern-normalize/modern-normalize.css";
 
 
 html {
