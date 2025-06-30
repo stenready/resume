@@ -1,4 +1,3 @@
-import 'modern-normalize/modern-normalize.css'
 import '@/assets/main.scss'
 
 //icons
@@ -11,8 +10,6 @@ import '@/plugins/icons.js'
 
 import { createApp } from 'vue'
 import App from './App.vue'
-
-
 
 const app = createApp(App)
 app.component('FontAwesomeIcon', FontAwesomeIcon)
