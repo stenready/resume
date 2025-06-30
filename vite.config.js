@@ -8,6 +8,7 @@ import svgLoader from 'vite-svg-loader'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [vue(), vueDevTools(),  svgLoader()],
+  base: './',
   build: {
     outDir: 'dist',
     assetsInlineLimit: 4096, // файлы меньше 4 КБ инлайнятся в JS
