@@ -1,0 +1,22 @@
+:root {
+  --accent: #1e90ff;
+  --accent2: #105fa9;
+  --card-bg: #ffffff;
+  --border: #d1d5db;
+  --text: #222222;
+  --white: #ffffff;
+  --shadow-light: rgba(30, 144, 255, 0.15);
+  --bg-color: #fafafa;
+  --card-color: #ffffff;
+  --selected-section-color: forestgreen;
+  --position-color: #1e90ff;
+}
+
+html[data-theme="dark"] {
+  --bg-color: #07192f;
+  --card-color: #343d55;
+  --text: #ffffff;
+  --card-bg: #343d55;
+  --position-color: #ffffff;
+  --border: #07192f;
+}

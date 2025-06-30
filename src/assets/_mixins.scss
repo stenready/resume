@@ -1,0 +1,35 @@
+@mixin sectionTitle {
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--text);
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0;
+
+  svg {
+    font-size: 2rem;
+    color: var(--accent);
+  }
+}
+
+@mixin minWidth($dw) {
+  @media  (min-width: $dw + px) {
+    @content;
+  }
+}
+
+@mixin maxWidth($dw) {
+  @media  (max-width: $dw + px) {
+    @content;
+  }
+}
+
+@mixin between($dw-min, $dw-max) {
+  @media  (min-width: $dw-min + px) and (max-width: $dw-max + px) {
+    @content;
+  }
+}

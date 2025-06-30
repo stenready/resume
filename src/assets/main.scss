@@ -1,0 +1,46 @@
+@forward "root-vars";
+@forward "helpers";
+@forward "mixins";
+@use "vars" as *;
+@use "mixins" as *;
+
+html {
+  scroll-behavior: smooth !important;
+}
+
+ul {
+  padding: 0;
+
+  li {
+    list-style-type: none;
+    padding: 0;
+  }
+}
+
+.base-link {
+  text-decoration: none;
+  color: var(--accent);
+  width: fit-content;
+  display: inline-block;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+main {
+  position: relative;
+  z-index: 1;
+  max-width: $desktopContainerMaxWidth;
+  margin: 3rem auto 4rem auto;
+
+  @include maxWidth(1024) {
+    margin: 10px;
+  }
+}
+
+section[id] {
+  @include maxWidth(1024) {
+    scroll-margin-top: 250px;
+  }
+}

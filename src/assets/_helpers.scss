@@ -1,0 +1,46 @@
+.position-relative {
+  position: relative !important;
+}
+
+.centered-auto {
+  margin: 0 auto;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.gap-1 {
+  gap: 1rem;
+}
+
+.align-items-center {
+  align-items: center !important;
+}
+
+.justify-between {
+  justify-content: space-between !important;
+}
+
+
+.to-uppercase {
+  text-transform: uppercase !important;
+}
+
+
+.bold {
+  font-weight: bold;
+}
+
+.font-500 {
+  font-weight: 500;
+}
+
+
+.mt-1 {
+  margin-top: 1rem;
+}
