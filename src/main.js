@@ -1,7 +1,7 @@
 import './assets/main.scss'
 
 //icons
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { FontAwesomeIcon } from '/@fortawesome/vue-fontawesome'
 
 ///
 
