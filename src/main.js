@@ -5,8 +5,8 @@ import { FontAwesomeIcon } from '/@fortawesome/vue-fontawesome'
 
 ///
 
-import { i18n } from '@/plugins/i18n.js'
-import '@/plugins/icons.js'
+import { i18n } from '/plugins/i18n.js'
+import '/plugins/icons.js'
 
 import { createApp } from 'vue'
 import App from './App.vue'

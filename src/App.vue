@@ -33,7 +33,7 @@
 <script setup>
 //imports
 import { defineAsyncComponent } from 'vue'
-import { SECTIONS_NAMES } from '@/constants.js'
+import { SECTIONS_NAMES } from '/constants.js'
 
 //components
 const TheBg = defineAsyncComponent(() => import('@/components/the/TheBg.vue'))
