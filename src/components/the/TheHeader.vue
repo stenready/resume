@@ -5,17 +5,19 @@
   >
     <a @click="scrollToSection(menuList?.[0])" href="#about" class="link-logo">{{ t('logo') }}</a>
 
-    <nav class="nav">
+    <nav class="nav" aria-label="Main navigation">
       <ul class="nav-container d-flex align-items-center">
         <li
           @click="scrollToSection(menuListItem)"
           v-for="menuListItem of menuListItems"
           :key="menuListItem?.id"
           class="nav-item"
+          :aria-label="menuListItem?.title"
         >
           <a
             :class="{ active: activeSection === menuListItem?.id }"
             :href="`#${menuListItem?.id}`"
+            :id="`${menuListItem?.id}-link`"
             class="nav-item-link"
           >
             {{ menuListItem?.title }}

@@ -1,12 +1,12 @@
 <template>
   <div data-component-name="ActionsPanel" class="ActionsPanel">
-    <BaseButton @click="onChangeTheme" size="small" type="main">
+    <BaseButton id="theme-btn" aria-label="theme" @click="onChangeTheme" size="small" type="main">
       <template #icon>
         {{ getCurrentTheme?.themeIcon }}
       </template>
     </BaseButton>
 
-    <BaseButton @click="onChangeLocale" size="small" type="main">
+    <BaseButton id="lang-btn" aria-label="lang" @click="onChangeLocale" size="small" type="main">
       <div class="to-uppercase font-500">
         {{ appLocale }}
       </div>
@@ -14,8 +14,10 @@
 
     <!--    //bg actions-->
     <BaseButton
-      v-for="bgItem of bgList"
+      v-for="(bgItem, idx) of bgList"
       :key="bgItem?.id"
+      :aria-label="`bg ${idx + 1}`"
+      :id="`bg ${idx + 1}`"
       class="bg-btn"
       :class="[{ active: bgItem?.isActive }]"
       size="small"

@@ -18,8 +18,9 @@ const bgList = reactive([
       colorMode: 'variance',
       birdSize: 0.7,
       wingSpan: 10,
-      speedLimit: 4,
+      speedLimit: 1,
       cohesion: 100.0,
+
     },
   },
   {

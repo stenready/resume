@@ -6,19 +6,19 @@
       </div>
 
       <div class="buttons">
-        <BaseButton type="social">
+        <BaseButton id="Linkedin-btn" aria-label="LinkedIn" type="social">
           <a :href="SOCIAL_LINKS.LINKED_IN" target="_blank">
             <FontAwesomeIcon icon="fa-brands fa-linkedin" />
           </a>
         </BaseButton>
 
-        <BaseButton type="social">
+        <BaseButton id="Telegram-btn" aria-label="Telegram" type="social">
           <a :href="SOCIAL_LINKS.TG" target="_blank">
             <FontAwesomeIcon icon="fa-brands fa-telegram" />
           </a>
         </BaseButton>
 
-        <BaseButton type="social">
+        <BaseButton id="email-btn" aria-label="Email" type="social">
           <a :href="`mailto:${SOCIAL_LINKS.EMAIL}`">
             <FontAwesomeIcon icon="fa-solid fa-envelope" />
           </a>
@@ -47,7 +47,13 @@
           {{ t('goodProgrammerMsg') }}
         </p>
 
-        <BaseButton :is-link="true" type="rounded-outline" class="mt-1">
+        <BaseButton
+          :aria-label="t('downloadResume')"
+          :is-link="true"
+          id="download-resume-btn"
+          type="rounded-outline"
+          class="mt-1"
+        >
           <a download="" href="/files/resume2.pdf">
             <FontAwesomeIcon icon="fa-solid fa-file-arrow-down" class="icon-download" />
 
@@ -231,7 +237,6 @@ $paddingContainer: 1.25rem 4rem;
     }
   }
 
-
   @include maxWidth(1024) {
     padding: 0;
     opacity: 0.9;
@@ -273,6 +278,5 @@ $paddingContainer: 1.25rem 4rem;
     justify-content: center;
     align-items: center;
   }
-
 }
 </style>

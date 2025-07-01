@@ -12,21 +12,39 @@
       </div>
 
       <div class="buttons-wrap">
-        <BaseButton :is-link="true" type="rounded-outline" class="with-icon">
+        <BaseButton
+          id="email-contact"
+          :aria-label="SOCIAL_LINKS.EMAIL"
+          :is-link="true"
+          type="rounded-outline"
+          class="with-icon"
+        >
           <a :href="`mailto:${SOCIAL_LINKS.EMAIL}`">
             <FontAwesomeIcon icon="fa-solid fa-envelope" />
             {{ SOCIAL_LINKS.EMAIL }}
           </a>
         </BaseButton>
 
-        <BaseButton :is-link="true" type="rounded-outline" class="with-icon">
+        <BaseButton
+          id="LinkedIn-contact"
+          aria-label="LinkedIn"
+          :is-link="true"
+          type="rounded-outline"
+          class="with-icon"
+        >
           <a :href="SOCIAL_LINKS.LINKED_IN" target="_blank">
             <FontAwesomeIcon icon="fa-brands fa-linkedin" />
             LinkedIn
           </a>
         </BaseButton>
 
-        <BaseButton :is-link="true" type="rounded-outline" class="with-icon">
+        <BaseButton
+          id="telegram-contact"
+          aria-label="Telegram"
+          :is-link="true"
+          type="rounded-outline"
+          class="with-icon"
+        >
           <a :href="SOCIAL_LINKS.TG" target="_blank">
             <FontAwesomeIcon icon="fa-brands fa-telegram" />
             Telegram

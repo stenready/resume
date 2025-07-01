@@ -199,7 +199,7 @@ const experienceList = computed(() => {
       }
 
       .desc {
-        font-size: 1rem;
+        font-size: 1.25rem;
         color: var(--text);
         margin-top: 1rem;
         line-height: 1.5;

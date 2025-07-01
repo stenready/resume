@@ -1,5 +1,13 @@
 <template>
-  <button v-bind="attrs" :class="[classes]" data-component-name="BaseButton" class="BaseButton">
+  <button
+    :aria-label="ariaLabel"
+    v-bind="attrs"
+    :class="[classes]"
+    :id="id"
+    data-component-name="BaseButton"
+    class="BaseButton"
+    type="button"
+  >
     <span v-if="$slots.icon" class="icon">
       <slot name="icon"></slot>
     </span>
@@ -14,6 +22,16 @@ import { useAttrs } from 'vue'
 
 //props
 const props = defineProps({
+  id: {
+    type: String,
+    default: '',
+    required: true,
+  },
+  ariaLabel: {
+    type: String,
+    default: '',
+    required: true,
+  },
   isLink: {
     type: Boolean,
     default: false,
