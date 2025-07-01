@@ -43,6 +43,7 @@ main {
 }
 
 section[id] {
+  scroll-margin-top: 50px;
   @include maxWidth(1024) {
     scroll-margin-top: 250px;
   }
