@@ -36,8 +36,9 @@ import { defineAsyncComponent } from 'vue'
 import { SECTIONS_NAMES } from '@/constants.js'
 
 //components
-const TheBg = defineAsyncComponent(() => import('@/components/the/TheBg.vue'))
-const TheHeader = defineAsyncComponent(() => import('@/components/the/TheHeader.vue'))
+import TheBg from '@/components/the/TheBg.vue'
+import TheHeader from '@/components/the/TheHeader.vue'
+
 const TheSettingsPanel = defineAsyncComponent(() => import('@/components/the/TheSettingsPanel.vue'))
 const AboutMeSection = defineAsyncComponent(
   () => import('@/components/sections/AboutMeSection.vue'),

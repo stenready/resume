@@ -2,11 +2,10 @@ import { reactive, ref } from 'vue'
 import BIRDS from 'vanta/dist/vanta.birds.min'
 import NET from 'vanta/dist/vanta.net.min.js'
 import GLOBE from 'vanta/dist/vanta.globe.min.js'
-import DOTS from 'vanta/dist/vanta.dots.min.js'
 
 const bgList = reactive([
   {
-    id: crypto.randomUUID(),
+    id: 'birds',
     bg: BIRDS,
     urlImage: '/images/birds.jpg',
     isActive: false,
@@ -24,7 +23,7 @@ const bgList = reactive([
     },
   },
   {
-    id: crypto.randomUUID(),
+    id: 'net',
     urlImage: '/images/net.jpg',
     isActive: false,
     bg: NET,
@@ -39,17 +38,10 @@ const bgList = reactive([
     },
   },
   {
-    id: crypto.randomUUID(),
+    id: 'globe',
     urlImage: '/images/globe.jpg',
     isActive: false,
     bg: GLOBE,
-    options: {},
-  },
-  {
-    id: crypto.randomUUID(),
-    urlImage: '/images/dots.jpg',
-    isActive: false,
-    bg: DOTS,
     options: {},
   },
 ])

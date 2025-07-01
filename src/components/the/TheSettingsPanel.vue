@@ -43,7 +43,7 @@ const BaseButton = defineAsyncComponent(() => import('@/components/app/BaseButto
 /// hooks custom
 const { onChangeTheme, getCurrentTheme } = useTheme()
 const { appLocale, onChangeLocale } = useLanguage()
-const { bgList, setActive } = useBg()
+const { setActive, bgList } = useBg()
 </script>
 
 <style lang="scss">

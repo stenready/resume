@@ -47,7 +47,9 @@ const initVanta = () => {
 
 //hooks
 onMounted(() => {
-  initVanta()
+  setTimeout(() => {
+    initVanta()
+  }, 1000)
 })
 
 onBeforeUnmount(() => {
