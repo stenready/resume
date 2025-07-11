@@ -5,7 +5,7 @@ import uk from '@/locales/uk.json'
 
 export const i18n = createI18n({
   legacy: false,
-  locale: 'uk',
+  locale: 'en',
   fallbackLocale: 'en',
   messages: {
     en,
