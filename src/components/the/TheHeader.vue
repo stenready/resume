@@ -56,7 +56,7 @@ const menuListItems = computed(() => {
 })
 
 onMounted(() => {
-  sections = Array.from(document.querySelectorAll('main section'))
+  sections = Array.from(document.querySelectorAll('section'))
   setupIntersectionObserver()
 })
 
@@ -67,29 +67,33 @@ onBeforeUnmount(() => {
 })
 
 const setupIntersectionObserver = () => {
-  const headerHeight = headerRef.value?.offsetHeight || 0
+  observer = new IntersectionObserver(
+    (entries) => {
+      let mostVisibleEntry = null
+      let highestRatio = 0
 
-  const options = {
-    root: null,
-    rootMargin: `-${headerHeight}px 0px 0px 0px`, // учитываем высоту header
-    threshold: [0.15, 0.3, 0.45, 0.6, 0.75, 0.85, 1.0], // множественные пороги
-  }
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && entry.intersectionRatio > highestRatio) {
+          highestRatio = entry.intersectionRatio
+          mostVisibleEntry = entry
+        }
+      })
 
-  observer = new IntersectionObserver((entries) => {
-    let mostVisibleEntry = null
-    let highestRatio = 0
-
-    entries.forEach((entry) => {
-      if (entry.isIntersecting && entry.intersectionRatio > highestRatio) {
-        highestRatio = entry.intersectionRatio
-        mostVisibleEntry = entry
+      if (mostVisibleEntry?.target?.id) {
+        activeId.value = mostVisibleEntry.target.id
       }
-    })
 
-    if (mostVisibleEntry && mostVisibleEntry.target.id) {
-      activeId.value = mostVisibleEntry.target.id
-    }
-  }, options)
+      const lastSection = sections[sections.length - 1]
+      const rect = lastSection.getBoundingClientRect()
+      if (rect.bottom <= window.innerHeight && rect.top >= 0) {
+        activeId.value = lastSection?.id
+      }
+    },
+    {
+      threshold: [0.15, 0.3, 0.45, 0.6, 0.75, 0.85, 1.0],
+      root: null,
+    },
+  )
 
   sections.forEach((section) => {
     if (section.id) {
