@@ -1,23 +1,26 @@
 <template>
   <header
-    data-component-name="HeaderComponent"
-    class="centered-auto d-flex align-items-center justify-between HeaderComponent"
+    data-component-name="TheHeader"
+    class="centered-auto d-flex align-items-center justify-between TheHeader"
+    ref="headerRef"
   >
-    <a @click="scrollToSection(menuList?.[0])" href="#about" class="link-logo">{{ t('logo') }}</a>
+    <a @click.prevent="onScrollToSection(menuListItems?.[0]?.id)" href="#about" class="link-logo">{{
+      t('logo')
+    }}</a>
 
     <nav class="nav" aria-label="Main navigation">
       <ul class="nav-container d-flex align-items-center">
         <li
-          @click="scrollToSection(menuListItem)"
+          @click.prevent="onScrollToSection(menuListItem?.id)"
           v-for="menuListItem of menuListItems"
           :key="menuListItem?.id"
           class="nav-item"
           :aria-label="menuListItem?.title"
         >
           <a
-            :class="{ active: activeSection === menuListItem?.id }"
             :href="`#${menuListItem?.id}`"
             :id="`${menuListItem?.id}-link`"
+            :class="[{ active: activeId === menuListItem?.id }]"
             class="nav-item-link"
           >
             {{ menuListItem?.title }}
@@ -29,13 +32,16 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { SECTIONS_NAMES } from '@/constants.js'
-import useObserver from '@/use/useObserver.js'
+import { scrollWindowToSelector } from '@/helpers/index.js'
 
-const { activeSection } = useObserver(Object.values(SECTIONS_NAMES))
-////
+const activeId = ref(SECTIONS_NAMES.ABOUT_ME)
+const headerRef = ref(null)
+///
+let sections = []
+let observer = null
 
 const { t } = useI18n()
 
@@ -49,12 +55,63 @@ const menuListItems = computed(() => {
   ]
 })
 
-const scrollToSection = (menuItem) => {
-  const element = document.getElementById(menuItem?.id)
-  if (element) {
-    activeSection.value = menuItem?.id
-    element.scrollIntoView({ behavior: 'smooth' })
+onMounted(() => {
+  sections = Array.from(document.querySelectorAll('main section'))
+  setupIntersectionObserver()
+})
+
+onBeforeUnmount(() => {
+  if (observer) {
+    observer.disconnect()
   }
+})
+
+const setupIntersectionObserver = () => {
+  const headerHeight = headerRef.value?.offsetHeight || 0
+
+  const options = {
+    root: null,
+    rootMargin: `-${headerHeight}px 0px 0px 0px`, // учитываем высоту header
+    threshold: [0.15, 0.3, 0.45, 0.6, 0.75, 0.85, 1.0], // множественные пороги
+  }
+
+  observer = new IntersectionObserver((entries) => {
+    let mostVisibleEntry = null
+    let highestRatio = 0
+
+    entries.forEach((entry) => {
+      if (entry.isIntersecting && entry.intersectionRatio > highestRatio) {
+        highestRatio = entry.intersectionRatio
+        mostVisibleEntry = entry
+      }
+    })
+
+    if (mostVisibleEntry && mostVisibleEntry.target.id) {
+      activeId.value = mostVisibleEntry.target.id
+    }
+  }, options)
+
+  sections.forEach((section) => {
+    if (section.id) {
+      observer.observe(section)
+    }
+  })
+}
+
+const onScrollToSection = (menuItemId) => {
+  if (!menuItemId) {
+    return false
+  }
+
+  if (observer) {
+    observer.disconnect()
+  }
+
+  activeId.value = menuItemId
+  scrollWindowToSelector(`#${menuItemId}`, headerRef?.value.offsetHeight)
+  setTimeout(() => {
+    setupIntersectionObserver()
+  }, 250)
 }
 </script>
 
@@ -62,7 +119,7 @@ const scrollToSection = (menuItem) => {
 @use '@/assets/vars' as *;
 @use '@/assets/mixins' as *;
 
-header.HeaderComponent {
+header.TheHeader {
   max-width: $desktopContainerMaxWidth;
   background: var(--bg-color);
   position: sticky;
@@ -74,7 +131,7 @@ header.HeaderComponent {
     font-weight: 700;
     text-decoration: none;
     color: var(--accent);
-    transition: transform 0.3s linear;
+    transition: transform 0.3s ease-in;
 
     &:hover {
       transform: scale(1.05);
@@ -92,7 +149,7 @@ header.HeaderComponent {
       position: relative;
       text-decoration: none;
       padding-bottom: 4px;
-      transition: color 0.3s ease;
+      transition: color 0.1s ease;
       cursor: pointer;
 
       &:after {
@@ -111,7 +168,9 @@ header.HeaderComponent {
         color: var(--accent2);
 
         &:after {
-          width: 100%;
+          @include minWidth(768) {
+            width: 100%;
+          }
         }
       }
 
@@ -120,6 +179,7 @@ header.HeaderComponent {
 
         &:after {
           background: var(--selected-section-color) !important;
+          width: 100%;
         }
       }
     }

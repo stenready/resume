@@ -1,5 +1,5 @@
 <template>
-  <div data-component-name="ActionsPanel" class="ActionsPanel">
+  <div data-component-name="TheSettingsPanel" class="TheSettingsPanel">
     <BaseButton id="theme-btn" aria-label="theme" @click="onChangeTheme" size="small" type="main">
       <template #icon>
         {{ getCurrentTheme?.themeIcon }}
@@ -52,7 +52,7 @@ const { setActive, bgList } = useBg()
 @use '@/assets/vars' as *;
 @use '@/assets/mixins' as *;
 
-.ActionsPanel {
+.TheSettingsPanel {
   position: fixed;
   right: 2rem;
   display: flex;
@@ -84,7 +84,8 @@ const { setActive, bgList } = useBg()
   }
 
   @include maxWidth(1024) {
-    left: 1rem;
+    transform: translateX(-50%);
+    left: 50%;
     top: 9rem;
     flex-direction: row;
     justify-content: center;

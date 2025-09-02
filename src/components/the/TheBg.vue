@@ -1,5 +1,5 @@
 <template>
-  <div ref="wrapRef" class="bg"></div>
+  <div data-component-name="TheBg" ref="wrapRef" class="bg"></div>
 </template>
 
 <script setup>
