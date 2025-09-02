@@ -91,17 +91,19 @@ const { setActive, bgList } = useBg()
   @include maxWidth(1024) {
     transform: translateX(-50%);
     left: 50%;
-    top: 8.5rem;
+    top: 8rem;
     flex-direction: row;
     justify-content: center;
     width: 100%;
   }
+
   @include minWidth(470) {
-    top: 7rem;
+    top: 6rem;
   }
 
   @include minWidth(579) {
-    top: 5rem;
+    top: 4rem;
   }
+
 }
 </style>
