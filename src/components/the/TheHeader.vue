@@ -111,7 +111,7 @@ const onScrollToSection = (menuItemId) => {
   scrollWindowToSelector(`#${menuItemId}`, headerRef?.value.offsetHeight)
   setTimeout(() => {
     setupIntersectionObserver()
-  }, 250)
+  }, 1000)
 }
 </script>
 
@@ -127,7 +127,7 @@ header.TheHeader {
   z-index: 2;
 
   .link-logo {
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-weight: 700;
     text-decoration: none;
     color: var(--accent);
@@ -188,7 +188,7 @@ header.TheHeader {
   @include maxWidth(1024) {
     justify-content: center !important;
     text-align: center;
-    padding: 10px 10px 4.5rem 10px;
+    padding: 10px 10px 3rem 10px;
     width: 100%;
     flex-wrap: wrap;
 

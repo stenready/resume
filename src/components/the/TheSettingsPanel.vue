@@ -64,6 +64,11 @@ const { setActive, bgList } = useBg()
   .BaseButton {
     width: 40px;
     height: 40px;
+
+    @include maxWidth(1120) {
+      width: 30px;
+      height: 30px;
+    }
   }
 
   .bg-btn {
@@ -86,7 +91,7 @@ const { setActive, bgList } = useBg()
   @include maxWidth(1024) {
     transform: translateX(-50%);
     left: 50%;
-    top: 9rem;
+    top: 8.5rem;
     flex-direction: row;
     justify-content: center;
     width: 100%;

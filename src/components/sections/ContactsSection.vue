@@ -127,7 +127,7 @@ const { t } = useI18n()
     .buttons-wrap {
       button {
         width: 100%;
-        font-size: 1.25rem !important;
+        font-size: 1rem !important;
       }
     }
   }
