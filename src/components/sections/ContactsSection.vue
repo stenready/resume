@@ -1,55 +1,57 @@
 <template>
   <div data-component-name="ContactsSection" class="ContactsSection">
-    <div class="ContactsSection-title">
-      <FontAwesomeIcon icon="fa-id-card" />
+    <div class="wrapper">
+      <div class="ContactsSection-title">
+        <FontAwesomeIcon icon="fa-id-card" />
 
-      {{ t('contacts') }}
-    </div>
-
-    <div class="contacts-wrap">
-      <div class="message">
-        {{ t('writeMeMessage') }}
+        {{ t('contacts') }}
       </div>
 
-      <div class="buttons-wrap">
-        <BaseButton
-          id="email-contact"
-          :aria-label="SOCIAL_LINKS.EMAIL"
-          :is-link="true"
-          type="rounded-outline"
-          class="with-icon"
-        >
-          <a :href="`mailto:${SOCIAL_LINKS.EMAIL}`">
-            <FontAwesomeIcon icon="fa-solid fa-envelope" />
-            {{ SOCIAL_LINKS.EMAIL }}
-          </a>
-        </BaseButton>
+      <div class="contacts-wrap">
+        <div class="message">
+          {{ t('writeMeMessage') }}
+        </div>
 
-        <BaseButton
-          id="LinkedIn-contact"
-          aria-label="LinkedIn"
-          :is-link="true"
-          type="rounded-outline"
-          class="with-icon"
-        >
-          <a :href="SOCIAL_LINKS.LINKED_IN" target="_blank">
-            <FontAwesomeIcon icon="fa-brands fa-linkedin" />
-            LinkedIn
-          </a>
-        </BaseButton>
+        <div class="buttons-wrap">
+          <BaseButton
+            id="email-contact"
+            :aria-label="SOCIAL_LINKS.EMAIL"
+            :is-link="true"
+            type="rounded-outline"
+            class="with-icon"
+          >
+            <a :href="`mailto:${SOCIAL_LINKS.EMAIL}`">
+              <FontAwesomeIcon icon="fa-solid fa-envelope" />
+              {{ SOCIAL_LINKS.EMAIL }}
+            </a>
+          </BaseButton>
 
-        <BaseButton
-          id="telegram-contact"
-          aria-label="Telegram"
-          :is-link="true"
-          type="rounded-outline"
-          class="with-icon"
-        >
-          <a :href="SOCIAL_LINKS.TG" target="_blank">
-            <FontAwesomeIcon icon="fa-brands fa-telegram" />
-            Telegram
-          </a>
-        </BaseButton>
+          <BaseButton
+            id="LinkedIn-contact"
+            aria-label="LinkedIn"
+            :is-link="true"
+            type="rounded-outline"
+            class="with-icon"
+          >
+            <a :href="SOCIAL_LINKS.LINKED_IN" target="_blank">
+              <FontAwesomeIcon icon="fa-brands fa-linkedin" />
+              LinkedIn
+            </a>
+          </BaseButton>
+
+          <BaseButton
+            id="telegram-contact"
+            aria-label="Telegram"
+            :is-link="true"
+            type="rounded-outline"
+            class="with-icon"
+          >
+            <a :href="SOCIAL_LINKS.TG" target="_blank">
+              <FontAwesomeIcon icon="fa-brands fa-telegram" />
+              Telegram
+            </a>
+          </BaseButton>
+        </div>
       </div>
     </div>
   </div>
@@ -72,8 +74,16 @@ const { t } = useI18n()
 @use '@/assets/mixins' as *;
 
 .ContactsSection {
-  margin: 4rem auto 0 auto;
+  margin: 4rem auto 4rem auto;
   max-width: 45rem;
+
+  .wrapper  {
+    background-color: var(--card-color);
+    padding: 1rem;
+    border: 1px solid var(--border);
+    box-shadow: 0 6px 12px var(--shadow-light);
+    border-radius: 16px;
+  }
 
   .with-icon {
     svg {
@@ -90,8 +100,8 @@ const { t } = useI18n()
     .message {
       font-size: 1.25rem;
       margin-bottom: 2rem;
-      font-weight: 700;
-      color: var(--accent);
+      font-weight: 600;
+      color: var(--text);
       line-height: 1.7;
     }
   }

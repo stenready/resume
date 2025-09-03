@@ -192,6 +192,9 @@ $paddingContainer: 1.25rem 4rem;
   .hero {
     background-color: var(--card-color);
     padding: 1rem;
+    border: 1px solid var(--border);
+    box-shadow: 0 6px 12px var(--shadow-light);
+    border-radius: 16px;
   }
 
   .left-info {

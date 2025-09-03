@@ -17,8 +17,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
-import { useAttrs } from 'vue'
+import { computed, useAttrs } from 'vue'
 
 //props
 const props = defineProps({

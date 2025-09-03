@@ -37,7 +37,7 @@ import { useI18n } from 'vue-i18n'
 import { SECTIONS_NAMES } from '@/constants.js'
 import { scrollWindowToSelector } from '@/helpers/index.js'
 
-const activeId = ref(SECTIONS_NAMES.ABOUT_ME)
+const activeId = ref(null)
 const headerRef = ref(null)
 ///
 let sections = []
@@ -58,6 +58,9 @@ const menuListItems = computed(() => {
 onMounted(() => {
   sections = Array.from(document.querySelectorAll('section'))
   setupIntersectionObserver()
+  setTimeout(() => {
+    activeId.value = SECTIONS_NAMES.ABOUT_ME
+  }, 150)
 })
 
 onBeforeUnmount(() => {
@@ -69,6 +72,10 @@ onBeforeUnmount(() => {
 const setupIntersectionObserver = () => {
   observer = new IntersectionObserver(
     (entries) => {
+      if (!activeId.value) {
+        return false
+      }
+
       let mostVisibleEntry = null
       let highestRatio = 0
 
@@ -80,7 +87,7 @@ const setupIntersectionObserver = () => {
       })
 
       if (mostVisibleEntry?.target?.id) {
-        activeId.value = mostVisibleEntry.target.id
+        activeId.value = mostVisibleEntry?.target?.id
       }
 
       const lastSection = sections[sections.length - 1]
@@ -123,7 +130,7 @@ const onScrollToSection = (menuItemId) => {
 @use '@/assets/vars' as *;
 @use '@/assets/mixins' as *;
 
-header.TheHeader {
+.TheHeader {
   max-width: $desktopContainerMaxWidth;
   background: var(--bg-color);
   position: sticky;
