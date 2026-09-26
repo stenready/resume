@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite-ssg build",
     "preview": "vite preview",
     "lint": "eslint . --fix",
     "format": "prettier --write src/"
@@ -16,8 +16,6 @@
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/vue-fontawesome": "^3.0.8",
     "modern-normalize": "^3.0.1",
-    "three": "^0.177.0",
-    "vanta": "^0.5.24",
     "vite-svg-loader": "^5.1.0",
     "vue": "^3.5.17",
     "vue-i18n": "^9.14.4"
@@ -32,7 +30,8 @@
     "prettier": "3.5.3",
     "sass-embedded": "^1.89.2",
     "terser": "^5.43.1",
-    "vite": "^7.0.0",
-    "vite-plugin-vue-devtools": "^7.7.7"
+    "vite": "^7.3.6",
+    "vite-plugin-vue-devtools": "^7.7.7",
+    "vite-ssg": "^28.3.0"
   }
 }

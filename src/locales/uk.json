@@ -1,5 +1,5 @@
 {
-  "logo": "Sten Ready",
+  "logo": "Станіслав Радченко",
   "aboutMe": "Про мене",
   "myExperience": "Мій досвід",
   "skills": "Навички",
@@ -83,11 +83,7 @@
       "meta": "Planeta Kino · з 2022",
       "title": "Автентифікація та контроль доступу",
       "summary": "Спільний шар автентифікації та контролю доступу для адмінпанелей і касових станцій мережі.",
-      "points": [
-        "Рольова модель прав.",
-        "Стратегія оновлення токенів.",
-        "Безпека сесій."
-      ],
+      "points": ["Рольова модель прав.", "Стратегія оновлення токенів.", "Безпека сесій."],
       "result": "один шар доступу для всіх адмінпанелей і касових станцій."
     },
     "suite": {
@@ -175,62 +171,27 @@
   "skillGroups": [
     {
       "title": "Мови",
-      "items": [
-        "JavaScript (ES6+)",
-        "HTML5",
-        "CSS3",
-        "SCSS",
-        "Sass"
-      ]
+      "items": ["JavaScript (ES6+)", "HTML5", "CSS3", "SCSS", "Sass"]
     },
     {
       "title": "Фреймворки",
-      "items": [
-        "Vue.js 2 / 3 (Composition API)",
-        "Nuxt.js 2 / 3",
-        "Node.js",
-        "Electron.js"
-      ]
+      "items": ["Vue.js 2 / 3 (Composition API)", "Nuxt.js 2 / 3", "Node.js", "Electron.js"]
     },
     {
       "title": "Стан і дані",
-      "items": [
-        "Pinia",
-        "Vuex",
-        "REST API",
-        "GraphQL",
-        "WebSockets",
-        "Axios"
-      ]
+      "items": ["Pinia", "Vuex", "REST API", "GraphQL", "WebSockets", "Axios"]
     },
     {
       "title": "UI-бібліотеки",
-      "items": [
-        "Tailwind CSS",
-        "Vuetify",
-        "BootstrapVue",
-        "Bootstrap",
-        "Vuexy"
-      ]
+      "items": ["Tailwind CSS", "Vuetify", "BootstrapVue", "Bootstrap", "Vuexy"]
     },
     {
       "title": "Медіа та карти",
-      "items": [
-        "HLS",
-        "Video.js",
-        "Leaflet",
-        "Google Maps",
-        "FullCalendar.js"
-      ]
+      "items": ["HLS", "Video.js", "Leaflet", "Google Maps", "FullCalendar.js"]
     },
     {
       "title": "Швидкодія та SEO",
-      "items": [
-        "PageSpeed / Core Web Vitals",
-        "SSR",
-        "технічне SEO",
-        "i18n"
-      ]
+      "items": ["PageSpeed / Core Web Vitals", "SSR", "технічне SEO", "i18n"]
     },
     {
       "title": "Безпека та доступи",
@@ -253,12 +214,7 @@
     },
     {
       "title": "Платформи та інструменти",
-      "items": [
-        "Git",
-        "AWS",
-        "автооновлення Electron",
-        "логування застосунків"
-      ]
+      "items": ["Git", "AWS", "автооновлення Electron", "логування застосунків"]
     },
     {
       "title": "Інженерні практики",

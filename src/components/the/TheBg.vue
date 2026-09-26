@@ -1,68 +1,103 @@
 <template>
-  <div data-component-name="TheBg" ref="wrapRef" class="bg"></div>
+  <!-- aurora: large blurred color spots slowly drifting behind everything (pure CSS) -->
+  <div data-component-name="TheBg" class="bg-aurora" aria-hidden="true">
+    <span class="aurora-spot spot-blue"></span>
+    <span class="aurora-spot spot-violet"></span>
+    <span class="aurora-spot spot-cyan"></span>
+    <span class="aurora-spot spot-deep-blue"></span>
+  </div>
+  <BgSkills />
 </template>
 
 <script setup>
-//imports
-import useTheme from '@/use/useTheme.js'
-import useBg from '@/use/useBg.js'
-import { ref, onMounted, onBeforeUnmount, watch, computed } from 'vue'
-import { BG_ENUMS } from '@/constants.js'
-
-const { selectedBg } = useBg()
-
-//custom hooks
-const { getCurrentTheme } = useTheme()
-
-//vars
-const wrapRef = ref(null)
-let vantaElement = null
-
-//computed
-const getColor = computed(() => {
-  return getCurrentTheme.value.isDark ? BG_ENUMS.DARK : BG_ENUMS.WHITE
-})
-
-//watches
-watch([() => getCurrentTheme.value?.isDark, () => selectedBg.value], () => {
-  initVanta()
-})
-
-//methods
-const destroyVanta = () => {
-  if (vantaElement) {
-    vantaElement.destroy()
-  }
-}
-
-const initVanta = () => {
-  destroyVanta()
-
-  vantaElement = selectedBg.value.bg({
-    el: wrapRef.value,
-    backgroundColor: getColor.value,
-    ...selectedBg.value.options,
-  })
-}
-
-//hooks
-onMounted(() => {
-  setTimeout(() => {
-    initVanta()
-  }, 1000)
-})
-
-onBeforeUnmount(() => {
-  destroyVanta()
-})
+import BgSkills from '@/components/the/BgSkills.vue'
 </script>
 
 <style scoped lang="scss">
-.bg {
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+// spot colors as "r, g, b" so the opacity can differ per theme
+$blue: 30, 144, 255;
+$violet: 139, 92, 246;
+$cyan: 34, 211, 238;
+$deepBlue: 16, 95, 169;
+
+.bg-aurora {
   position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.aurora-spot {
+  position: absolute;
+  border-radius: 50%;
+  // the gradient fades to transparent, so no costly `filter: blur` is needed
+  background: radial-gradient(
+    circle,
+    // --aurora-opacity is set per theme in _root-vars.scss
+    rgba(var(--spot-color), var(--aurora-opacity)) 0%,
+    rgba(var(--spot-color), 0) 70%
+  );
+  will-change: transform;
+  animation: drift var(--drift-duration) ease-in-out infinite alternate;
+}
+
+.spot-blue {
+  --spot-color: #{$blue};
+  --drift-duration: 28s;
+  --drift-x: 18vw;
+  --drift-y: 12vh;
+  width: 70vmax;
+  height: 70vmax;
+  top: -30vmax;
+  left: -20vmax;
+}
+
+.spot-violet {
+  --spot-color: #{$violet};
+  --drift-duration: 34s;
+  --drift-x: -16vw;
+  --drift-y: 18vh;
+  width: 60vmax;
+  height: 60vmax;
+  top: -10vmax;
+  right: -25vmax;
+}
+
+.spot-cyan {
+  --spot-color: #{$cyan};
+  --drift-duration: 40s;
+  --drift-x: 20vw;
+  --drift-y: -14vh;
+  width: 55vmax;
+  height: 55vmax;
+  bottom: -30vmax;
+  left: 10vmax;
+}
+
+.spot-deep-blue {
+  --spot-color: #{$deepBlue};
+  --drift-duration: 25s;
+  --drift-x: -14vw;
+  --drift-y: -16vh;
+  width: 50vmax;
+  height: 50vmax;
+  bottom: -20vmax;
+  right: -10vmax;
+}
+
+@keyframes drift {
+  from {
+    transform: translate(0, 0) scale(1);
+  }
+
+  to {
+    transform: translate(var(--drift-x), var(--drift-y)) scale(1.15);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora-spot {
+    animation: none;
+  }
 }
 </style>

@@ -68,7 +68,7 @@ const PROJECTS = [
 
 .ProjectsSection {
   margin: 4rem auto 0 auto;
-  max-width: 50rem;
+  max-width: $contentMaxWidth;
 
   .ProjectsSection-title {
     @include sectionTitle();

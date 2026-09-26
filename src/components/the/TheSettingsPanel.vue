@@ -11,24 +11,6 @@
         {{ appLocale }}
       </div>
     </BaseButton>
-
-    <!--    //bg actions-->
-    <BaseButton
-      v-for="(bgItem, idx) of bgList"
-      :key="bgItem?.id"
-      :aria-label="`bg ${idx + 1}`"
-      :id="`bg ${idx + 1}`"
-      class="bg-btn"
-      :class="[{ active: bgItem?.isActive }]"
-      size="small"
-      type="main"
-      @click="setActive(bgItem)"
-    >
-      <div
-        class="to-uppercase image-wrap font-500"
-        :style="{ backgroundImage: `url('${bgItem?.urlImage}')` }"
-      ></div>
-    </BaseButton>
   </div>
 </template>
 
@@ -37,7 +19,6 @@
 import { defineAsyncComponent } from 'vue'
 import useTheme from '@/use/useTheme.js'
 import useLanguage from '@/use/useLang.js'
-import useBg from '@/use/useBg.js'
 
 //components
 const BaseButton = defineAsyncComponent(() => import('@/components/app/BaseButton.vue'))
@@ -45,12 +26,13 @@ const BaseButton = defineAsyncComponent(() => import('@/components/app/BaseButto
 /// hooks custom
 const { onChangeTheme, getCurrentTheme } = useTheme()
 const { appLocale, onChangeLocale } = useLanguage()
-const { setActive, bgList } = useBg()
 </script>
 
 <style lang="scss">
 @use '@/assets/vars' as *;
 @use '@/assets/mixins' as *;
+
+$settingsPanelTopMobile: 4rem;
 
 .TheSettingsPanel {
   position: fixed;
@@ -71,39 +53,20 @@ const { setActive, bgList } = useBg()
     }
   }
 
-  .bg-btn {
-    &.BaseButton {
-      padding: 0 !important;
-      box-shadow: none;
-
-      .image-wrap {
-        width: 100%;
-        height: 100%;
-        background-position: center;
-      }
-
-      &.active {
-        outline: 4px solid var(--accent);
-      }
-    }
+  // below the full-width header
+  @include minWidth(1025) {
+    top: 4.25rem;
   }
 
+  // mobile: a row under the header that scrolls away with the page
   @include maxWidth(1024) {
+    position: absolute;
     transform: translateX(-50%);
     left: 50%;
-    top: 8rem;
+    top: $settingsPanelTopMobile;
     flex-direction: row;
     justify-content: center;
     width: 100%;
   }
-
-  @include minWidth(470) {
-    top: 6rem;
-  }
-
-  @include minWidth(579) {
-    top: 4rem;
-  }
-
 }
 </style>

@@ -8,15 +8,18 @@
   --shadow-light: rgba(30, 144, 255, 0.15);
   --bg-color: #fafafa;
   --card-color: #ffffff;
-  --selected-section-color: forestgreen;
+  --selected-section-color: var(--accent2);
   --position-color: #1e90ff;
+  --aurora-opacity: 0.22;
 }
 
-html[data-theme="dark"] {
+html[data-theme='dark'] {
   --bg-color: #07192f;
   --card-color: #343d55;
   --text: #ffffff;
   --card-bg: #343d55;
   --position-color: #ffffff;
   --border: #07192f;
+  --selected-section-color: #ffffff;
+  --aurora-opacity: 0.4;
 }

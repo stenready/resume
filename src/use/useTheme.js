@@ -1,7 +1,8 @@
 import { computed, onMounted, ref } from 'vue'
 import { STORAGE_KEYS, THEMES } from '@/constants.js'
 ///
-const theme = ref(localStorage.getItem(STORAGE_KEYS['current-theme']) || THEMES.light)
+const savedTheme = import.meta.env.SSR ? null : localStorage.getItem(STORAGE_KEYS['current-theme'])
+const theme = ref(savedTheme || THEMES.light)
 ///
 const getCurrentTheme = computed(() => {
   const isDark = theme.value === THEMES.dark

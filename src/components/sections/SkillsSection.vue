@@ -36,7 +36,7 @@ $groupTitleWidth: 13rem;
 
 .SkillsSection {
   margin: 4rem auto 0 auto;
-  max-width: 50rem;
+  max-width: $contentMaxWidth;
 
   .SkillsSection-title {
     @include sectionTitle();

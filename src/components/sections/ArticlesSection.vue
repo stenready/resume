@@ -99,7 +99,7 @@ $imageHeight: 200px;
 
 .ArticlesSessions {
   margin: 4rem auto 0 auto;
-  max-width: 50rem;
+  max-width: $contentMaxWidth;
 
   .ArticlesSessions-title {
     @include sectionTitle();

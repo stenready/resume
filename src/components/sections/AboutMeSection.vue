@@ -215,7 +215,7 @@ $avatarWidth: 12rem;
 $avatarHeight: 12rem;
 $avatarSizeMobile: 8rem;
 $gap: 4rem;
-$paddingContainer: 1.25rem 4rem;
+$paddingContainer: 1.25rem 0;
 
 .AboutMeSection {
   gap: $gap;
@@ -236,6 +236,10 @@ $paddingContainer: 1.25rem 4rem;
   }
 
   .left-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
     .buttons {
       margin-top: 1rem;
       display: grid;
@@ -259,6 +263,7 @@ $paddingContainer: 1.25rem 4rem;
 
   .full-name {
     @include sectionTitle();
+    font-size: 2.75rem;
     line-height: 1.15;
   }
 

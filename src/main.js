@@ -8,10 +8,11 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { i18n } from '@/plugins/i18n.js'
 import '@/plugins/icons.js'
 
-import { createApp } from 'vue'
+import { ViteSSG } from 'vite-ssg/single-page'
 import App from './App.vue'
 
-const app = createApp(App)
-app.component('FontAwesomeIcon', FontAwesomeIcon)
-
-app.use(i18n).mount('#app')
+// prerendered to static HTML at build time (vite-ssg build), mounted as usual in the browser
+export const createApp = ViteSSG(App, ({ app }) => {
+  app.component('FontAwesomeIcon', FontAwesomeIcon)
+  app.use(i18n)
+})

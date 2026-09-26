@@ -1,5 +1,5 @@
 {
-  "logo": "Sten Ready",
+  "logo": "Stanislav Radchenko",
   "aboutMe": "About Me",
   "myExperience": "My Experience",
   "skills": "Skills",
@@ -84,11 +84,7 @@
       "meta": "Planeta Kino · since 2022",
       "title": "Authentication & access control",
       "summary": "Shared authentication and access-control layer for the chain’s admin panels and cashier workstations.",
-      "points": [
-        "Role-based permission model.",
-        "Token refresh strategy.",
-        "Session security."
-      ],
+      "points": ["Role-based permission model.", "Token refresh strategy.", "Session security."],
       "result": "one access layer used across all admin panels and cashier workstations."
     },
     "suite": {
@@ -176,62 +172,27 @@
   "skillGroups": [
     {
       "title": "Languages",
-      "items": [
-        "JavaScript (ES6+)",
-        "HTML5",
-        "CSS3",
-        "SCSS",
-        "Sass"
-      ]
+      "items": ["JavaScript (ES6+)", "HTML5", "CSS3", "SCSS", "Sass"]
     },
     {
       "title": "Frameworks",
-      "items": [
-        "Vue.js 2 / 3 (Composition API)",
-        "Nuxt.js 2 / 3",
-        "Node.js",
-        "Electron.js"
-      ]
+      "items": ["Vue.js 2 / 3 (Composition API)", "Nuxt.js 2 / 3", "Node.js", "Electron.js"]
     },
     {
       "title": "State & Data",
-      "items": [
-        "Pinia",
-        "Vuex",
-        "REST APIs",
-        "GraphQL",
-        "WebSockets",
-        "Axios"
-      ]
+      "items": ["Pinia", "Vuex", "REST APIs", "GraphQL", "WebSockets", "Axios"]
     },
     {
       "title": "UI Libraries",
-      "items": [
-        "Tailwind CSS",
-        "Vuetify",
-        "BootstrapVue",
-        "Bootstrap",
-        "Vuexy"
-      ]
+      "items": ["Tailwind CSS", "Vuetify", "BootstrapVue", "Bootstrap", "Vuexy"]
     },
     {
       "title": "Media & Maps",
-      "items": [
-        "HLS",
-        "Video.js",
-        "Leaflet",
-        "Google Maps",
-        "FullCalendar.js"
-      ]
+      "items": ["HLS", "Video.js", "Leaflet", "Google Maps", "FullCalendar.js"]
     },
     {
       "title": "Performance & SEO",
-      "items": [
-        "PageSpeed / Core Web Vitals optimization",
-        "SSR",
-        "technical SEO",
-        "i18n"
-      ]
+      "items": ["PageSpeed / Core Web Vitals optimization", "SSR", "technical SEO", "i18n"]
     },
     {
       "title": "Security & Access",
@@ -254,12 +215,7 @@
     },
     {
       "title": "Platforms & Tools",
-      "items": [
-        "Git",
-        "AWS",
-        "Electron auto-update",
-        "application logging"
-      ]
+      "items": ["Git", "AWS", "Electron auto-update", "application logging"]
     },
     {
       "title": "Engineering practices",

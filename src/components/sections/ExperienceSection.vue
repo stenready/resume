@@ -210,7 +210,7 @@ $entryIndentMobile: 1.75rem;
 
 .ExperienceSection {
   margin: 4rem auto 0 auto;
-  max-width: 50rem;
+  max-width: $contentMaxWidth;
 
   .ExperienceSection-title {
     @include sectionTitle();

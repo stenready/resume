@@ -6,7 +6,7 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 import svgLoader from 'vite-svg-loader'
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ isSsrBuild }) => ({
   plugins: [vue(), vueDevTools(), svgLoader()],
   base: './',
   build: {
@@ -18,10 +18,12 @@ export default defineConfig({
         // Кастомные имена чанков
         chunkFileNames: 'js/[name]-[hash].js',
         assetFileNames: 'assets/[name]-[hash][extname]',
-        manualChunks: {
-          // Разделение vendor-чанков
-          vue: ['vue'],
-        },
+        manualChunks: isSsrBuild
+          ? undefined
+          : {
+              // Разделение vendor-чанков
+              vue: ['vue'],
+            },
       },
     },
     minify: 'terser', // или 'esbuild'
@@ -52,9 +54,18 @@ export default defineConfig({
       },
     },
   },
+  define: {
+    __VUE_PROD_DEVTOOLS__: false,
+    __VUE_I18N_FULL_INSTALL__: true,
+    __VUE_I18N_LEGACY_API__: false,
+    __INTLIFY_PROD_DEVTOOLS__: false,
+  },
+  ssr: {
+    noExternal: ['vue-i18n', /^@intlify\//],
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
-})
+}))

@@ -2,11 +2,17 @@
   <header
     data-component-name="TheHeader"
     class="centered-auto d-flex align-items-center justify-between TheHeader"
+    :class="{ 'is-scrolled': isScrolled }"
     ref="headerRef"
   >
-    <a @click.prevent="onScrollToSection(menuListItems?.[0]?.id)" href="#about" class="link-logo">{{
-      t('logo')
-    }}</a>
+    <a
+      @click.prevent="onScrollToSection(menuListItems?.[0]?.id)"
+      href="#about"
+      class="link-logo"
+      :aria-label="t('logo')"
+      :title="t('logo')"
+      >&lt;SR/&gt;</a
+    >
 
     <nav class="nav" aria-label="Main navigation">
       <ul class="nav-container d-flex align-items-center">
@@ -37,8 +43,12 @@ import { useI18n } from 'vue-i18n'
 import { SECTIONS_NAMES } from '@/constants.js'
 import { scrollWindowToSelector } from '@/helpers/index.js'
 
+// the header is transparent at the top of the page and turns into frosted glass once scrolled
+const SCROLLED_THRESHOLD = 8
+
 const activeId = ref(null)
 const headerRef = ref(null)
+const isScrolled = ref(false)
 ///
 let sections = []
 let observer = null
@@ -56,7 +66,13 @@ const menuListItems = computed(() => {
   ]
 })
 
+const onScroll = () => {
+  isScrolled.value = window.scrollY > SCROLLED_THRESHOLD
+}
+
 onMounted(() => {
+  onScroll()
+  window.addEventListener('scroll', onScroll, { passive: true })
   sections = Array.from(document.querySelectorAll('section'))
   setupIntersectionObserver()
   setTimeout(() => {
@@ -65,6 +81,8 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  window.removeEventListener('scroll', onScroll)
+
   if (observer) {
     observer.disconnect()
   }
@@ -131,27 +149,61 @@ const onScrollToSection = (menuItemId) => {
 @use '@/assets/vars' as *;
 @use '@/assets/mixins' as *;
 
+$headerGlassOpacity: 70%;
+$headerGlassBlur: 12px;
+$headerBorderOpacity: 60%;
+$headerPaddingBlock: 0.375rem;
+$logoHeight: 2.25rem;
+$headerMinSidePadding: 1rem;
+
 .TheHeader {
-  max-width: $desktopContainerMaxWidth;
-  background: var(--bg-color);
+  // full-width bar; the side padding keeps the logo and links aligned with the content column
+  width: 100%;
+  padding: $headerPaddingBlock max(#{$headerMinSidePadding}, calc((100% - #{$contentMaxWidth}) / 2));
+  border-bottom: 1px solid transparent;
+  background: transparent;
   position: sticky;
   top: 0;
   z-index: 2;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease;
 
+  // frosted glass over the content while the page is scrolled
+  &.is-scrolled {
+    border-bottom-color: color-mix(in srgb, var(--border) $headerBorderOpacity, transparent);
+    background: color-mix(in srgb, var(--bg-color) $headerGlassOpacity, transparent);
+    backdrop-filter: blur($headerGlassBlur);
+  }
+
+  // monogram in a code-tag style: <SR/>
   .link-logo {
-    font-size: 1.8rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    height: $logoHeight;
+    padding: 0 0.6rem;
+    border-radius: 0.6rem;
+    background: var(--accent);
+    color: var(--white);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.95rem;
     font-weight: 700;
+    letter-spacing: -0.02em;
     text-decoration: none;
-    color: var(--accent);
-    transition: transform 0.3s ease-in;
+    transition:
+      background-color 0.2s ease,
+      transform 0.2s ease;
 
     &:hover {
-      transform: scale(1.05);
-      color: var(--accent2);
+      background: var(--accent2);
+      transform: translateY(-1px);
     }
   }
 
   .nav-container {
+    margin: 0;
     gap: 1rem;
 
     .nav-item-link {
@@ -197,21 +249,31 @@ const onScrollToSection = (menuItemId) => {
     }
   }
 
+  // mobile: logo on top, one horizontally scrollable row of links
+  // mobile: logo and one horizontally scrollable row of links
   @include maxWidth(1024) {
-    justify-content: center !important;
-    text-align: center;
-    padding: 10px 10px 3rem 10px;
+    gap: 0.75rem;
+    padding: $headerPaddingBlock 1rem;
     width: 100%;
-    flex-wrap: wrap;
+
+    .nav {
+      min-width: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
 
     .nav-container {
-      justify-content: center;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
+      white-space: nowrap;
+      padding-bottom: 0.25rem;
 
       a {
         margin-bottom: 0;
-        text-transform: uppercase;
-        font-size: 1rem !important;
+        font-size: 0.95rem !important;
       }
     }
   }

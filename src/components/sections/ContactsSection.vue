@@ -127,7 +127,7 @@ const { t } = useI18n()
 
 .ContactsSection {
   margin: 4rem auto 4rem auto;
-  max-width: 45rem;
+  max-width: $contentMaxWidth;
 
   .wrapper {
     background-color: var(--card-color);

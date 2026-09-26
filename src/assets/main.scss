@@ -1,14 +1,23 @@
-@forward "root-vars";
-@forward "helpers";
-@forward "mixins";
-@use "vars" as *;
-@use "mixins" as *;
+@forward 'root-vars';
+@forward 'helpers';
+@forward 'mixins';
+@use 'vars' as *;
+@use 'mixins' as *;
 
-@import "modern-normalize/modern-normalize.css";
-
+@import 'modern-normalize/modern-normalize.css';
 
 html {
   scroll-behavior: smooth !important;
+}
+
+body {
+  font-family:
+    'Inter',
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
 }
 
 ul {
@@ -34,15 +43,16 @@ ul {
 main {
   position: relative;
   z-index: 1;
-  max-width: $desktopContainerMaxWidth;
+  max-width: $contentMaxWidth;
   margin: 3rem auto;
 
   @include maxWidth(1024) {
     padding: 10px;
+    // room for the settings panel, which sits under the header on mobile
+    padding-top: 3.25rem;
     margin: 0;
   }
 }
-
 
 .app {
   background-color: var(--bg-color) !important;
