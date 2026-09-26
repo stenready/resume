@@ -90,6 +90,19 @@
               Viber
             </a>
           </BaseButton>
+
+          <BaseButton
+            id="github-contact"
+            aria-label="GitHub"
+            :is-link="true"
+            type="rounded-outline"
+            class="with-icon"
+          >
+            <a :href="SOCIAL_LINKS.GITHUB_RESUME" target="_blank">
+              <FontAwesomeIcon icon="fa-brands fa-github" />
+              GitHub
+            </a>
+          </BaseButton>
         </div>
       </div>
     </div>
@@ -116,7 +129,7 @@ const { t } = useI18n()
   margin: 4rem auto 4rem auto;
   max-width: 45rem;
 
-  .wrapper  {
+  .wrapper {
     background-color: var(--card-color);
     padding: 1rem;
     border: 1px solid var(--border);
@@ -126,7 +139,9 @@ const { t } = useI18n()
 
   .with-icon {
     svg {
-      margin-top: 4px;
+      width: 1.1em;
+      height: 1.1em;
+      flex-shrink: 0;
     }
   }
 

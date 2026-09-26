@@ -139,14 +139,12 @@
 import { useI18n } from 'vue-i18n'
 import { computed, defineAsyncComponent } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { SECTIONS_NAMES, SOCIAL_LINKS } from '@/constants.js'
+import { PLANETA_KINO_URL, SECTIONS_NAMES, SOCIAL_LINKS } from '@/constants.js'
 import { scrollWindowToSelector } from '@/helpers/index.js'
 
 const BaseButton = defineAsyncComponent(() => import('@/components/app/BaseButton.vue'))
 
 const { t, locale } = useI18n()
-
-const PLANETA_KINO_URL = 'https://planetakino.ua/'
 
 const RESUME_FILES = {
   en: 'Stanislav_Radchenko_Senior_Frontend_Developer_EN.pdf',

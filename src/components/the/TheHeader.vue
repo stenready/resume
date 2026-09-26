@@ -49,6 +49,7 @@ const menuListItems = computed(() => {
   return [
     { id: SECTIONS_NAMES.ABOUT_ME, title: t('aboutMe') },
     { id: SECTIONS_NAMES.EXPERIENCE, title: t('myExperience') },
+    { id: SECTIONS_NAMES.PROJECTS, title: t('projects') },
     { id: SECTIONS_NAMES.SKILLS, title: t('skills') },
     { id: SECTIONS_NAMES.ARTICLES, title: t('articles') },
     { id: SECTIONS_NAMES.CONTACTS, title: t('contacts') },

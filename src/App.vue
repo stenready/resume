@@ -13,6 +13,10 @@
         <ExperienceSection />
       </section>
 
+      <section :id="SECTIONS_NAMES.PROJECTS">
+        <ProjectsSection />
+      </section>
+
       <section :id="SECTIONS_NAMES.SKILLS">
         <SkillsSection />
       </section>
@@ -45,6 +49,10 @@ const AboutMeSection = defineAsyncComponent(
 )
 const ExperienceSection = defineAsyncComponent(
   () => import('@/components/sections/ExperienceSection.vue'),
+)
+
+const ProjectsSection = defineAsyncComponent(
+  () => import('@/components/sections/ProjectsSection.vue'),
 )
 
 const SkillsSection = defineAsyncComponent(() => import('@/components/sections/SkillsSection.vue'))

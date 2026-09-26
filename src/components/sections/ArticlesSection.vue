@@ -7,12 +7,25 @@
     </div>
 
     <ul class="articles-list">
-      <li class="article-item" v-for="articleItem of listOfArticles" :key="articleItem?.id">
-        <a :href="articleItem?.link" target="_blank" class="base-link">
-          <img :alt="articleItem?.alt" :src="articleItem?.img" class="img" />
+      <li
+        v-for="article of ARTICLES"
+        :key="article.id"
+        class="article-item"
+        :class="{ featured: article.featured }"
+      >
+        <a :href="article.link" target="_blank" rel="noopener noreferrer" class="article-link">
+          <img v-if="article.img" :alt="t(article.titleKey)" :src="article.img" class="img" />
+          <div v-else class="cover" aria-hidden="true">
+            <FontAwesomeIcon :icon="article.coverIcon" />
+          </div>
 
-          <div class="title">
-            {{ articleItem?.title }}
+          <div class="article-body">
+            <div class="article-meta">
+              <time :datetime="article.date">{{ formatDate(article.date) }}</time>
+              · LinkedIn ↗
+            </div>
+
+            <div class="title">{{ t(article.titleKey) }}</div>
           </div>
         </a>
       </li>
@@ -27,51 +40,66 @@ import Article2 from '/public/images/article2.jfif'
 import Article3 from '/public/images/article3.jfif'
 import Article4 from '/public/images/article4.jfif'
 
-const { t } = useI18n()
-import { computed } from 'vue'
+const { t, locale } = useI18n()
 
-const listOfArticles = computed(() => {
-  return [
-    {
-      id: crypto.randomUUID(),
-      title: t('article1'),
-      img: Article1,
-      link: 'https://www.linkedin.com/feed/update/urn:li:activity:7129115314503462913/',
-      alt: 'article 1',
-    },
-    {
-      id: crypto.randomUUID(),
-      title: t('article2'),
-      img: Article2,
-      link: 'https://www.linkedin.com/feed/update/urn:li:activity:7339749942971826177/',
-      alt: 'article 2',
-    },
-    {
-      id: crypto.randomUUID(),
-      link: 'https://www.linkedin.com/feed/update/urn:li:activity:7136797824494497792/',
-      title: t('article3'),
-      img: Article3,
-      alt: 'article 3',
-    },
-    {
-      id: crypto.randomUUID(),
-      title: t('article4'),
-      link: 'https://www.linkedin.com/feed/update/urn:li:activity:7137537502512353281/',
-      img: Article4,
-      alt: 'article 4',
-    },
-  ]
-})
+// newest first; dates are the LinkedIn publication dates.
+// featured: spans the full row; items without img get a cover with coverIcon
+const ARTICLES = [
+  {
+    id: 'djinni-validation',
+    titleKey: 'article5',
+    date: '2026-09-12',
+    featured: true,
+    coverIcon: 'fa-solid fa-shield-halved',
+    link: 'https://www.linkedin.com/feed/update/urn:li:activity:7504454763992977408/',
+  },
+  {
+    id: 'vue-mixins',
+    titleKey: 'article2',
+    date: '2025-06-14',
+    img: Article2,
+    link: 'https://www.linkedin.com/pulse/vue-mixins-%25D0%25BC%25D0%25B0%25D0%25B3%25D0%25B8%25D1%258F-%25D0%25B8%25D0%25BB%25D0%25B8-%25D0%25B1%25D0%25B0%25D0%25BD%25D0%25B0%25D0%25BB%25D1%258C%25D1%2589%25D0%25B8%25D0%25BD%25D0%25B0-stanislav-radchenko-zpjqe',
+  },
+  {
+    id: 'oop-solid',
+    titleKey: 'article4',
+    date: '2023-12-04',
+    img: Article4,
+    link: 'https://www.linkedin.com/pulse/%25D0%25BF%25D0%25BE%25D1%2587%25D0%25B5%25D0%25BC%25D1%2583-%25D0%25BE%25D0%25BE%25D0%25BF-%25D0%25B8-solid-%25D0%25B2%25D0%25B0%25D0%25B6%25D0%25BD%25D1%258B-%25D0%25B2-%25D0%25BC%25D0%25B8%25D1%2580%25D0%25B5-javascript-stanislav-radchenko-qxobc',
+  },
+  {
+    id: 'proxy-define-property',
+    titleKey: 'article3',
+    date: '2023-12-02',
+    img: Article3,
+    link: 'https://www.linkedin.com/pulse/%25D0%25B2%25D0%25B2%25D0%25B5%25D0%25B4%25D0%25B5%25D0%25BD%25D0%25B8%25D0%25B5-%25D0%25B2-%25D1%2580%25D0%25B5%25D0%25B0%25D0%25BA%25D1%2582%25D0%25B8%25D0%25B2%25D0%25BD%25D0%25BE%25D1%2581%25D1%2582%25D1%258C-javascript-proxy-vs-stanislav-radchenko-txbie',
+  },
+  {
+    id: 'jwt-axios',
+    titleKey: 'article1',
+    date: '2023-11-11',
+    img: Article1,
+    link: 'https://www.linkedin.com/pulse/%25D1%2580%25D0%25B5%25D0%25B0%25D0%25BB%25D0%25B8%25D0%25B7%25D0%25B0%25D1%2586%25D0%25B8%25D1%258F-%25D1%2581%25D0%25B5%25D1%2580%25D0%25B2%25D0%25B8%25D1%2581%25D0%25B0-%25D0%25B4%25D0%25BB%25D1%258F-%25D1%2583%25D0%25BF%25D1%2580%25D0%25B0%25D0%25B2%25D0%25BB%25D0%25B5%25D0%25BD%25D0%25B8%25D1%258F-jwt-%25D1%2582%25D0%25BE%25D0%25BA%25D0%25B5%25D0%25BD%25D0%25B0%25D0%25BC%25D0%25B8-%25D1%2581-axios-radchenko-jange',
+  },
+]
+
+const formatDate = (isoDate) =>
+  new Intl.DateTimeFormat(locale.value, {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  }).format(new Date(isoDate))
 </script>
 
 <style scoped lang="scss">
 @use '@/assets/vars' as *;
 @use '@/assets/mixins' as *;
 
+$imageHeight: 200px;
+
 .ArticlesSessions {
   margin: 4rem auto 0 auto;
-  max-width: 60rem;
-  min-height: 22rem;
+  max-width: 50rem;
 
   .ArticlesSessions-title {
     @include sectionTitle();
@@ -80,50 +108,80 @@ const listOfArticles = computed(() => {
 
   .articles-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-    gap: 2rem;
-    margin: 0 auto;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+    margin: 0;
+  }
 
-    .article-item {
-      box-shadow: 0 6px 12px var(--shadow-light);
-      display: flex;
-      flex-direction: column;
-      cursor: default;
-      background: var(--card-bg);
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      overflow: hidden;
-      transition:
-        box-shadow 0.35s,
-        transform 0.3s;
+  .article-item {
+    display: flex;
+    background: var(--card-color);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 6px 12px var(--shadow-light);
+    overflow: hidden;
+    transition:
+      box-shadow 0.35s,
+      transform 0.3s;
 
-      .img {
-        width: 100%;
-        height: 200px;
-        object-fit: cover;
-      }
-
-      .title {
-        padding: 0.7rem 1.5rem;
-      }
-
-      a {
-        text-decoration: none;
-        font-weight: 700;
-        color: var(--accent);
-        line-height: 1.5;
-      }
-
-      &:hover {
-        box-shadow: 0 20px 40px var(--shadow-light);
-        transform: translateY(-10px);
-        cursor: pointer;
-      }
+    &:hover {
+      box-shadow: 0 20px 40px var(--shadow-light);
+      transform: translateY(-6px);
     }
+  }
+
+  .article-link {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    text-decoration: none;
+  }
+
+  .img {
+    width: 100%;
+    height: $imageHeight;
+    object-fit: cover;
+  }
+
+  .cover {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: $imageHeight;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: var(--white);
+    font-size: 4rem;
+  }
+
+  .featured {
+    grid-column: 1 / -1;
+  }
+
+  .article-body {
+    padding: 1rem 1.25rem 1.25rem;
+  }
+
+  .article-meta {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--text);
+    opacity: 0.6;
+  }
+
+  .title {
+    margin-top: 0.4rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1.45;
+    color: var(--accent);
   }
 
   @include maxWidth(1024) {
     margin: 1rem 0;
+    max-width: 100% !important;
+
     .ArticlesSessions-title {
       font-size: 1.7rem;
       text-align: center;
@@ -135,28 +193,12 @@ const listOfArticles = computed(() => {
     }
 
     .articles-list {
+      grid-template-columns: 1fr;
       gap: 1rem;
     }
 
     .article-item {
       opacity: 0.9;
-
-      img {
-        max-height: 250px;
-        height: auto !important;
-      }
-
-      a {
-        flex-direction: column;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .title {
-        font-size: 1.25rem;
-      }
     }
   }
 }

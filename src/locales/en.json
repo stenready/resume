@@ -39,29 +39,245 @@
   "languageEnglish": "English — B1-, actively improving",
   "languageBulgarian": "Bulgarian — A1",
   "downloadResume": "Download Resume",
-  "planetaKino": "PlanetaKino",
-  "date1": "January 2022 - Present",
-  "date2": "August 2021 – January 2022",
-  "date3": "May 2021 – July 2021",
-  "date4": "August 2020 – May 2021",
-  "position": "Lead Front-end Developer",
-  "desc1": "Developed administrative panels, websites, and cashier workstation systems (ARM). Mentored frontend developers, reviewed merge requests (MR), and created complex components and modules. Participated in project architecture design and implementation. Improved frontend performance to meet high PageSpeed metrics and web performance standards. Built cross-platform desktop applications using Electron, integrating web technologies with native capabilities. SEO optimization.",
   "techStack": "Technologies",
-  "frontEndDeveloper": "Frontend Developer",
-  "vJetGroup": "v-jet group",
-  "desc2": "Developed client applications for international clients: Admin panel for the 'Choice' restaurant chain. Admin panel and website for a Polish furniture factory (B2B and B2C). Admin panel for an advertising company managing over 1000 tablets across Ukraine. Led projects from inception to completion: designed architecture, implemented core modules, and focused on performance optimization and maintainability.",
-  "quartSoft": "QuartSoft",
-  "desc3": "Developed a cartography service for Ukraine. Worked on systems for handling cadastral and registry data. Built both desktop and mobile platform versions with emphasis on performance and usability.",
-  "foxprimeTv": "FOXPRIME.tv",
-  "desc4": "Developed a streaming service: admin panel and public website. Designed system architecture, implemented SEO and performance optimization. Enabled streaming of TV channels, movies, and radio. Integrated payment systems and recurring billing. Refactored BootstrapVue components into clean, extensible custom components.",
+  "projects": "Key projects",
+  "projectResult": "Result",
+  "showAllBullets": "Show all ({n})",
+  "showLessBullets": "Show less",
   "article1": "Implementing JWT Token Management Service Using Axios and Vue.js",
   "article2": "Vue Mixins: Magic or Boilerplate?",
-  "article3": "Introduction to JavaScript: Proxy vs Object.defineProperty",
+  "article3": "Introduction to Reactivity in JavaScript: Proxy vs Object.defineProperty",
   "article4": "Why OOP and SOLID Matter in JavaScript World?",
-  "writeMeMessage": "If my experience interests you or you have a proposal for technical collaboration or just an interesting discussion—I'd be happy to connect. Open to new acquaintances and good people.",
+  "article5": "Force-changing my country on Djinni: why validation must live on the backend too",
+  "writeMeMessage": "Open to Senior / Lead Frontend roles — remote, hybrid, on-site or relocation. The fastest way to reach me is email or Telegram.",
   "footerText": "© {year} Stanislav Radchenko",
   "cardProduct10": "users and business needs.",
   "metaName": "Stanislav Radchenko",
   "resume": "Resume",
-  "metaDesc": "Frontend-reseller, focused on folding business add-ons.\nI create highly innovative client-administrative systems that help businesses scale up and help traders to operate without hesitation."
+  "metaDesc": "Frontend-reseller, focused on folding business add-ons.\nI create highly innovative client-administrative systems that help businesses scale up and help traders to operate without hesitation.",
+  "projectItems": {
+    "pos": {
+      "meta": "Planeta Kino · since 2022",
+      "title": "Cashier workstation (POS) for 12 cinemas",
+      "summary": "Cross-platform Electron desktop app that front-desk staff work in every day: tickets, virtual loyalty cards, receipts and orders.",
+      "points": [
+        "Launched from scratch — from the first prototype to rollout across all 12 cinemas.",
+        "Integrated payment terminals, barcode/QR scanners, LiqPay payments and receipt fiscalization via Vchasno PRRO.",
+        "Auto-update and application logging: new versions reach every cinema without on-site intervention, incidents are diagnosed without physical access to the till.",
+        "Sentry across the workstations for visibility into production errors."
+      ],
+      "result": "the system front-desk staff work in every day in all 12 cinemas."
+    },
+    "migrations": {
+      "meta": "Planeta Kino · since 2022",
+      "title": "Migrations: Vue 2 → 3, REST → GraphQL",
+      "summary": "Modernizing the frontend stack and the API layer of a live product.",
+      "points": [
+        "Vue 2.6 → 2.7 → 3.",
+        "Options API → Composition API.",
+        "Vuex → Pinia.",
+        "REST → GraphQL, including a hybrid REST + GraphQL setup."
+      ],
+      "result": "the product kept shipping throughout the Vue migration."
+    },
+    "auth": {
+      "meta": "Planeta Kino · since 2022",
+      "title": "Authentication & access control",
+      "summary": "Shared authentication and access-control layer for the chain’s admin panels and cashier workstations.",
+      "points": [
+        "Role-based permission model.",
+        "Token refresh strategy.",
+        "Session security."
+      ],
+      "result": "one access layer used across all admin panels and cashier workstations."
+    },
+    "suite": {
+      "meta": "Planeta Kino · since 2022",
+      "title": "Internal product suite",
+      "summary": "The chain’s internal tools, delivered end-to-end.",
+      "points": [
+        "Analytics system.",
+        "Reporting system.",
+        "Showtime scheduling tool.",
+        "Visual builder for auditorium seat maps.",
+        "Real-time interaction in the ticket purchase flow.",
+        "Ticket refunds.",
+        "Discount system.",
+        "Marketing and promotions system.",
+        "Marketing mailing system."
+      ],
+      "result": "the chain’s internal tools for sales, scheduling, marketing and reporting, delivered end-to-end."
+    },
+    "streaming": {
+      "meta": "Foxprime.tv · 2020–2021",
+      "title": "Streaming platform",
+      "summary": "Streaming service launched from the ground up: admin panel and public website for TV channels, movies and radio.",
+      "points": [
+        "Custom video player on top of Video.js with HLS playback.",
+        "Subscription flow and user account: plans, recurring billing, LiqPay payments.",
+        "Replaced BootstrapVue with custom in-house components."
+      ],
+      "result": "4,000+ active users; bundle size cut by 45%."
+    }
+  },
+  "experience": {
+    "planetaKino": {
+      "period": "January 2022 – Present",
+      "role": "Lead Frontend Developer",
+      "location": "Kyiv, Ukraine",
+      "bullets": [
+        "Own the frontend of a cinema chain with 12 locations: internal admin panels, the public website (planetakino.ua) and the cashier workstation (POS/ARM) systems used in every cinema.",
+        "Launched the cashier workstation (POS/ARM) from scratch — from the first prototype to rollout across all 12 cinemas; it is now the system front-desk staff work in every day. Built as a cross-platform Electron desktop app integrating payment terminals and barcode/QR scanners for virtual loyalty cards, tickets, receipts and orders.",
+        "Designed and built the authentication and access-control layer used across the admin panels and cashier workstations: role-based permission model, token refresh strategy and session security.",
+        "Migrated the codebase from Vue 2.6 to 2.7 and then to Vue 3: moved components from the Options API to the Composition API and state management from Vuex to Pinia, keeping the product shipping throughout.",
+        "Mentor a team of 5 frontend developers: review merge requests, set shared code and component standards, and onboard new engineers.",
+        "Raised PageSpeed scores to 90+ on key public pages and brought Core Web Vitals to target thresholds through rendering, asset and bundle optimization, and handled technical SEO with SSR in Nuxt.js.",
+        "Implemented auto-update for the Electron workstations, so new versions reach all 12 cinemas without on-site intervention, and built an application logging system that makes incidents on remote machines diagnosable without physical access to the till.",
+        "Delivered the chain's internal product suite end-to-end: an analytics system, a showtime scheduling tool, a visual builder for auditorium seat maps, and a marketing and promotions system.",
+        "Integrated LiqPay payments and receipt fiscalization through the Vchasno PRRO service, covering both online ticket sales and the in-cinema cashier workstations.",
+        "Set up Sentry from scratch across the web applications and the Electron workstations, giving the team visibility into production errors and cutting time to diagnose incidents.",
+        "Took part in launching the company's online streaming platform, implementing playback with HLS and Video.js and real-time updates over WebSockets.",
+        "Take part in designing and implementing the overall project architecture, and build the complex components and modules other developers reuse across products."
+      ]
+    },
+    "vjet": {
+      "period": "August 2021 – January 2022",
+      "role": "Frontend Developer",
+      "location": "Dnipro, Ukraine",
+      "bullets": [
+        "Delivered client-side applications for international clients end-to-end: designed the architecture, implemented the key modules and owned performance and maintainability.",
+        "Worked on a marketing platform for an advertising company: an admin panel that managed and delivered advertising content to 1,000+ tablets deployed across Ukraine.",
+        "Admin panel and B2B/B2C website for a Polish furniture factory.",
+        "Took part in building the admin panel for the \"Choice\" restaurant chain, covering the full flow — from creating a restaurant and its menu to order management and guest tipping."
+      ]
+    },
+    "quartSoft": {
+      "period": "May 2021 – July 2021",
+      "role": "Frontend Developer",
+      "location": "Kramatorsk, Ukraine",
+      "bullets": [
+        "Built a nationwide cartography service for Ukraine, working with cadastral and land-registry data.",
+        "Delivered both the desktop and the mobile version of the platform, focused on map rendering performance and usability on large datasets."
+      ]
+    },
+    "foxprime": {
+      "period": "August 2020 – May 2021",
+      "role": "Frontend Developer",
+      "location": "Kyiv, Ukraine",
+      "bullets": [
+        "Took part in launching a streaming service from the ground up, building both the admin panel and the public website for a platform with 4,000+ active users.",
+        "Built the streaming experience for TV channels, movies and radio, including a custom video player on top of Video.js with HLS playback.",
+        "Developed the subscription flow and the user account area: plans, recurring billing and LiqPay payments.",
+        "Replaced BootstrapVue with custom in-house components, cutting bundle size by 45% and giving the team full control over the UI.",
+        "Contributed to system architecture, SEO and performance optimization."
+      ]
+    }
+  },
+  "skillGroups": [
+    {
+      "title": "Languages",
+      "items": [
+        "JavaScript (ES6+)",
+        "HTML5",
+        "CSS3",
+        "SCSS",
+        "Sass"
+      ]
+    },
+    {
+      "title": "Frameworks",
+      "items": [
+        "Vue.js 2 / 3 (Composition API)",
+        "Nuxt.js 2 / 3",
+        "Node.js",
+        "Electron.js"
+      ]
+    },
+    {
+      "title": "State & Data",
+      "items": [
+        "Pinia",
+        "Vuex",
+        "REST APIs",
+        "GraphQL",
+        "WebSockets",
+        "Axios"
+      ]
+    },
+    {
+      "title": "UI Libraries",
+      "items": [
+        "Tailwind CSS",
+        "Vuetify",
+        "BootstrapVue",
+        "Bootstrap",
+        "Vuexy"
+      ]
+    },
+    {
+      "title": "Media & Maps",
+      "items": [
+        "HLS",
+        "Video.js",
+        "Leaflet",
+        "Google Maps",
+        "FullCalendar.js"
+      ]
+    },
+    {
+      "title": "Performance & SEO",
+      "items": [
+        "PageSpeed / Core Web Vitals optimization",
+        "SSR",
+        "technical SEO",
+        "i18n"
+      ]
+    },
+    {
+      "title": "Security & Access",
+      "items": [
+        "Authentication",
+        "role-based access control (RBAC)",
+        "token refresh strategy",
+        "session security"
+      ]
+    },
+    {
+      "title": "Payments & Monitoring",
+      "items": [
+        "LiqPay",
+        "Vchasno PRRO (receipt fiscalization)",
+        "payment terminals",
+        "barcode/QR scanners",
+        "Sentry"
+      ]
+    },
+    {
+      "title": "Platforms & Tools",
+      "items": [
+        "Git",
+        "AWS",
+        "Electron auto-update",
+        "application logging"
+      ]
+    },
+    {
+      "title": "Engineering practices",
+      "items": [
+        "Frontend architecture",
+        "code review",
+        "mentoring",
+        "component design systems",
+        "cross-platform desktop apps"
+      ]
+    }
+  ],
+  "durationYears": {
+    "one": "{n} yr",
+    "other": "{n} yrs"
+  },
+  "durationMonths": {
+    "one": "{n} mo",
+    "other": "{n} mos"
+  }
 }

@@ -6,48 +6,33 @@
       {{ t('skills') }}
     </div>
 
-    <ul class="list-items">
-      <li class="item-skill" v-for="skillItem of listOfSkills" :key="skillItem?.id">
-        <FontAwesomeIcon v-if="skillItem?.icon" :icon="skillItem?.icon" />
+    <dl class="skill-groups">
+      <div v-for="(group, groupIdx) of tm('skillGroups')" :key="groupIdx" class="skill-group">
+        <dt class="group-title">{{ rt(group.title) }}</dt>
 
-        {{ skillItem?.title }}
-      </li>
-    </ul>
+        <dd class="group-items">
+          <ul class="items-list">
+            <li v-for="(item, itemIdx) of group.items" :key="itemIdx" class="label-item">
+              {{ rt(item) }}
+            </li>
+          </ul>
+        </dd>
+      </div>
+    </dl>
   </div>
 </template>
 
 <script setup>
 import { useI18n } from 'vue-i18n'
 
-import { reactive } from 'vue'
-
-const { t } = useI18n()
-
-const listOfSkills = reactive([
-  { id: crypto.randomUUID(), title: 'HTML5', icon: 'fa-brands fa-html5' },
-  { id: crypto.randomUUID(), title: 'CSS3', icon: 'fa-brands fa-css' },
-  { id: crypto.randomUUID(), title: 'Scss', icon: 'fa-brands fa-sass' },
-  { id: crypto.randomUUID(), title: 'JavaScript', icon: 'fa-brands fa-js' },
-  { id: crypto.randomUUID(), title: 'TypeScript', icon: '' },
-  { id: crypto.randomUUID(), title: 'Vue', icon: 'fa-brands fa-vuejs' },
-  { id: crypto.randomUUID(), title: 'Nuxt', icon: '' },
-  { id: crypto.randomUUID(), title: 'Tailwind CSS', icon: '' },
-  { id: crypto.randomUUID(), title: 'Vuetify', icon: '' },
-  { id: crypto.randomUUID(), title: 'Bootstrap Vue', icon: 'fa-brands fa-bootstrap' },
-  { id: crypto.randomUUID(), title: 'WebSockets', icon: '' },
-  { id: crypto.randomUUID(), title: 'Git', icon: 'fa-brands fa-github' },
-  { id: crypto.randomUUID(), title: 'GraphQL', icon: 'fa-solid fa-diagram-project' },
-  { id: crypto.randomUUID(), title: 'Rest API', icon: '' },
-  { id: crypto.randomUUID(), title: 'Electron', icon: 'fa-solid fa-atom' },
-  { id: crypto.randomUUID(), title: 'Video.js', icon: 'fa-solid fa-film' },
-  { id: crypto.randomUUID(), title: 'Axios', icon: '' },
-  { id: crypto.randomUUID(), title: 'Node.js', icon: 'fa-brands fa-node-js' },
-])
+const { t, tm, rt } = useI18n()
 </script>
 
 <style scoped lang="scss">
 @use '@/assets/vars' as *;
 @use '@/assets/mixins' as *;
+
+$groupTitleWidth: 13rem;
 
 .SkillsSection {
   margin: 4rem auto 0 auto;
@@ -58,45 +43,51 @@ const listOfSkills = reactive([
     margin-bottom: 1.5rem;
   }
 
-  .list-items {
+  .skill-groups {
+    margin: 0;
+    padding: 1rem 2rem;
+    background-color: var(--card-color);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 6px 12px var(--shadow-light);
+  }
+
+  .skill-group {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 2rem;
-    margin: 0 auto;
+    grid-template-columns: $groupTitleWidth 1fr;
+    gap: 1rem;
+    padding: 1rem 0;
 
-    .item-skill {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      box-shadow: 0 4px 10px var(--shadow-light);
-      padding: 1.5rem 1rem;
-      border-radius: 14px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      transition:
-        transform 0.3s ease,
-        box-shadow 0.3s ease,
-        background-color 0.3s ease;
-      cursor: default;
-      gap: 10px;
-
-      font-weight: 600;
-      color: var(--text);
-      font-size: 1.5rem;
-      user-select: none;
-      text-align: center;
-
-      &:hover {
-        transform: translateY(-6px) scale(1.03);
-        box-shadow: 0 12px 30px var(--shadow-light);
-        background-color: rgba(30, 144, 255, 0.4);
-      }
-
-      svg {
-        font-size: 1.8rem;
-      }
+    & + .skill-group {
+      border-top: 1px solid var(--border);
     }
+  }
+
+  .group-title {
+    padding-top: 0.2rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .group-items {
+    margin: 0;
+  }
+
+  .items-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0;
+  }
+
+  .label-item {
+    background-color: rgba(30, 144, 255, 0.15);
+    color: var(--accent);
+    padding: 4px 12px;
+    border-radius: 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
   }
 
   @include maxWidth(1024) {
@@ -113,9 +104,14 @@ const listOfSkills = reactive([
       display: none;
     }
 
-    .list-items {
+    .skill-groups {
       opacity: 0.9;
-      gap: 1rem;
+      padding: 0.5rem 1.25rem;
+    }
+
+    .skill-group {
+      grid-template-columns: 1fr;
+      gap: 0.6rem;
     }
   }
 }
