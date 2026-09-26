@@ -1,21 +1,22 @@
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
-  faLaptopCode,
   faEnvelope,
-  faCodeCompare,
-  faCodeMerge,
   faAtom,
-  faBullseye,
   faFileArrowDown,
   faTrophy,
   faDiagramProject,
   faFilm,
   faNewspaper,
-  faIdCard
+  faIdCard,
+  faCashRegister,
+  faGaugeHigh,
 } from '@fortawesome/free-solid-svg-icons'
 import {
   faLinkedin,
   faTelegram,
+  faInstagram,
+  faWhatsapp,
+  faViber,
   faVuejs,
   faDev,
   faHtml5,
@@ -28,6 +29,8 @@ import {
 } from '@fortawesome/free-brands-svg-icons'
 
 library.add(
+  faCashRegister,
+  faGaugeHigh,
   faIdCard,
   faNewspaper,
   faFilm,
@@ -41,14 +44,13 @@ library.add(
   faHtml5,
   faTrophy,
   faFileArrowDown,
-  faLaptopCode,
   faLinkedin,
   faTelegram,
+  faInstagram,
+  faWhatsapp,
+  faViber,
   faEnvelope,
-  faCodeCompare,
   faVuejs,
   faDev,
-  faCodeMerge,
   faAtom,
-  faBullseye,
 )

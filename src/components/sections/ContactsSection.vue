@@ -51,6 +51,45 @@
               Telegram
             </a>
           </BaseButton>
+
+          <BaseButton
+            id="instagram-contact"
+            aria-label="Instagram"
+            :is-link="true"
+            type="rounded-outline"
+            class="with-icon"
+          >
+            <a :href="SOCIAL_LINKS.INSTAGRAM" target="_blank">
+              <FontAwesomeIcon icon="fa-brands fa-instagram" />
+              Instagram
+            </a>
+          </BaseButton>
+
+          <BaseButton
+            id="whatsapp-contact"
+            aria-label="WhatsApp"
+            :is-link="true"
+            type="rounded-outline"
+            class="with-icon"
+          >
+            <a :href="SOCIAL_LINKS.WHATSAPP" target="_blank">
+              <FontAwesomeIcon icon="fa-brands fa-whatsapp" />
+              WhatsApp
+            </a>
+          </BaseButton>
+
+          <BaseButton
+            id="viber-contact"
+            aria-label="Viber"
+            :is-link="true"
+            type="rounded-outline"
+            class="with-icon"
+          >
+            <a :href="SOCIAL_LINKS.VIBER">
+              <FontAwesomeIcon icon="fa-brands fa-viber" />
+              Viber
+            </a>
+          </BaseButton>
         </div>
       </div>
     </div>

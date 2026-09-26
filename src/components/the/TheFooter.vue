@@ -1,6 +1,6 @@
 <template>
   <footer data-component-name="TheFooter" class="TheFooter">
-    <div>{{ t('footerText') }}</div>
+    <div>{{ t('footerText', { year: currentYear }) }}</div>
   </footer>
 </template>
 
@@ -8,6 +8,7 @@
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
+const currentYear = new Date().getFullYear()
 </script>
 
 <style scoped lang="scss">

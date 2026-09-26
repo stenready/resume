@@ -24,5 +24,9 @@ export const SECTIONS_NAMES = {
 export const SOCIAL_LINKS = {
   LINKED_IN: 'https://www.linkedin.com/in/stanislav-radchenko-639122205/',
   TG: ' https://t.me/stenready',
+  INSTAGRAM: 'https://www.instagram.com/readysten/',
+  WHATSAPP: 'https://wa.me/380987618744',
+  // Viber has no web fallback: the link opens the installed app
+  VIBER: 'viber://chat?number=%2B380987618744',
   EMAIL: 's.radchenko.develop@gmail.com'
 }

@@ -7,12 +7,14 @@ export default function useLanguage() {
   ///
   onMounted(() => {
     locale.value = localStorage.getItem(STORAGE_KEYS['current-locale']) || locale?.value
+    document.documentElement.lang = locale.value
   })
   ///
   const onChangeLocale = () => {
     locale.value =
       availableLocales.find((iterLocale) => iterLocale !== locale.value) || locale.value
     localStorage.setItem(STORAGE_KEYS['current-locale'], locale.value)
+    document.documentElement.lang = locale.value
   }
 
   return { appLocale: locale, onChangeLocale }
