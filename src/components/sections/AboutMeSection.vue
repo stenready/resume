@@ -5,7 +5,10 @@
         <img
           class="img-avatar"
           :alt="`${t('fullName')} — ${t('jobTitle')}`"
-          src="/images/avatar.jpg"
+          src="/images/avatar.webp"
+          width="192"
+          height="192"
+          fetchpriority="high"
         />
       </div>
 
