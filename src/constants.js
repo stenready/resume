@@ -23,7 +23,6 @@ export const SOCIAL_LINKS = {
   INSTAGRAM: 'https://www.instagram.com/readysten/',
   GITHUB_RESUME: 'https://github.com/stenready/resume',
   WHATSAPP: 'https://wa.me/380987618744',
-  // Viber has no web fallback: the link opens the installed app
   VIBER: 'viber://chat?number=%2B380987618744',
   EMAIL: 's.radchenko.develop@gmail.com',
 }

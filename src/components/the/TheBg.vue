@@ -1,5 +1,4 @@
 <template>
-  <!-- aurora: large blurred color spots slowly drifting behind everything (pure CSS) -->
   <div data-component-name="TheBg" class="bg-aurora" aria-hidden="true">
     <span class="aurora-spot spot-blue"></span>
     <span class="aurora-spot spot-violet"></span>
@@ -14,7 +13,6 @@ import BgSkills from '@/components/the/BgSkills.vue'
 </script>
 
 <style scoped lang="scss">
-// spot colors as "r, g, b" so the opacity can differ per theme
 $blue: 30, 144, 255;
 $violet: 139, 92, 246;
 $cyan: 34, 211, 238;
@@ -30,10 +28,8 @@ $deepBlue: 16, 95, 169;
 .aurora-spot {
   position: absolute;
   border-radius: 50%;
-  // the gradient fades to transparent, so no costly `filter: blur` is needed
   background: radial-gradient(
     circle,
-    // --aurora-opacity is set per theme in _root-vars.scss
     rgba(var(--spot-color), var(--aurora-opacity)) 0%,
     rgba(var(--spot-color), 0) 70%
   );

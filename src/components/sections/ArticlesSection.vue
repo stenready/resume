@@ -42,8 +42,6 @@ import Article4 from '/public/images/article4.jfif'
 
 const { t, locale } = useI18n()
 
-// newest first; dates are the LinkedIn publication dates.
-// featured: spans the full row; items without img get a cover with coverIcon
 const ARTICLES = [
   {
     id: 'djinni-validation',

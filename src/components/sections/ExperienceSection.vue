@@ -74,7 +74,6 @@ const { t, tm, rt, locale } = useI18n()
 const MONTHS_IN_YEAR = 12
 const VISIBLE_BULLETS_LIMIT = 6
 
-// job id -> true when all bullets are shown
 const expandedJobs = reactive({})
 
 const getBullets = (jobId) => tm(`experience.${jobId}.bullets`)
@@ -84,8 +83,6 @@ const getVisibleBullets = (jobId) => {
   return expandedJobs[jobId] ? bullets : bullets.slice(0, VISIBLE_BULLETS_LIMIT)
 }
 
-// newest first: the first item is rendered as the current job.
-// start/end are 'YYYY-MM'; end: null means "present"
 const JOBS = [
   {
     id: 'planetaKino',
@@ -172,7 +169,6 @@ const getCurrentYearMonth = () => {
   return `${now.getFullYear()}-${now.getMonth() + 1}`
 }
 
-// both the start and the end month count, as on LinkedIn: May–Jul = 3 months
 const getMonthsWorked = ({ start, end }) =>
   toMonthIndex(end || getCurrentYearMonth()) - toMonthIndex(start) + 1
 
@@ -250,7 +246,6 @@ $entryIndentMobile: 1.75rem;
     position: relative;
     padding-left: $entryIndent;
 
-    // vertical line from under the dot to the end of the entry
     &::before {
       content: '';
       position: absolute;

@@ -37,7 +37,6 @@ import { useI18n } from 'vue-i18n'
 
 const { t, tm, rt } = useI18n()
 
-// texts live in locales under projectItems.<id>
 const PROJECTS = [
   {
     id: 'pos',
@@ -91,7 +90,6 @@ const PROJECTS = [
     border-radius: 16px;
     box-shadow: 0 6px 12px var(--shadow-light);
 
-    // odd count: stretch the last card to the full row
     &:last-child:nth-child(odd) {
       grid-column: 1 / -1;
     }
@@ -148,7 +146,6 @@ const PROJECTS = [
     }
   }
 
-  // pushes result + stack to the bottom so cards in a row line up
   .project-result {
     margin-top: auto;
     padding: 0.6rem 0.9rem;

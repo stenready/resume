@@ -48,7 +48,6 @@ main {
 
   @include maxWidth(1024) {
     padding: 10px;
-    // room for the settings panel, which sits under the header on mobile
     padding-top: 3.25rem;
     margin: 0;
   }

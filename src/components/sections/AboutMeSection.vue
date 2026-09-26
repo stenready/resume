@@ -58,7 +58,6 @@
 
         <i18n-t keypath="heroSummary" tag="p" class="summary">
           <template #site>
-            <!-- no whitespace around the anchor text, otherwise it renders as "( planetakino.ua )" -->
             <a :href="PLANETA_KINO_URL" target="_blank" rel="noopener noreferrer" class="base-link"
               >planetakino.ua</a
             >
@@ -131,6 +130,16 @@
           </li>
         </ul>
       </div>
+
+      <div class="tag-group">
+        <div class="tag-group-title">{{ t('growthTitle') }}</div>
+
+        <ul class="tag-list">
+          <li class="tag-item" v-for="growthKey of GROWTH_KEYS" :key="growthKey">
+            {{ t(growthKey) }}
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -200,6 +209,8 @@ const LANGUAGE_KEYS = [
   'languageEnglish',
   'languageBulgarian',
 ]
+
+const GROWTH_KEYS = ['growthEnglish', 'growthNode', 'growthReact']
 
 const onScrollToContacts = () => {
   const headerHeight = document.querySelector('.TheHeader')?.offsetHeight || 0
@@ -433,7 +444,6 @@ $paddingContainer: 1.25rem 0;
     .stats {
       grid-template-columns: repeat(2, 1fr);
 
-      // odd count: stretch the last card to the full row
       .stat-item:last-child:nth-child(odd) {
         grid-column: 1 / -1;
       }

@@ -5,9 +5,27 @@ import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import svgLoader from 'vite-svg-loader'
 
+const GOATCOUNTER_ENDPOINT = 'https://sten-ready.goatcounter.com/count'
+
+const goatCounter = () => ({
+  name: 'goatcounter',
+  apply: 'build',
+  transformIndexHtml: () => [
+    {
+      tag: 'script',
+      attrs: {
+        'data-goatcounter': GOATCOUNTER_ENDPOINT,
+        async: true,
+        src: 'https://gc.zgo.at/count.js',
+      },
+      injectTo: 'body',
+    },
+  ],
+})
+
 // https://vite.dev/config/
 export default defineConfig(({ isSsrBuild }) => ({
-  plugins: [vue(), vueDevTools(), svgLoader()],
+  plugins: [vue(), vueDevTools(), svgLoader(), goatCounter()],
   base: './',
   build: {
     outDir: 'dist',

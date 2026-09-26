@@ -53,12 +53,10 @@ $settingsPanelTopMobile: 4rem;
     }
   }
 
-  // below the full-width header
   @include minWidth(1025) {
     top: 4.25rem;
   }
 
-  // mobile: a row under the header that scrolls away with the page
   @include maxWidth(1024) {
     position: absolute;
     transform: translateX(-50%);

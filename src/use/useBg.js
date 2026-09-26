@@ -1,7 +1,4 @@
-// Skills in the page background (BgSkills.vue), grouped by meaning.
-// Wide screens: each group is a block in its column beside the resume, groups separated by a gap.
-// Narrow screens: only the first skills in this order float around. Skills without `path` are drawn as text.
-// Icon paths: Simple Icons v16.32.0 (https://simpleicons.org, CC0-1.0), 24x24 viewBox.
+// icons: https://simpleicons.org
 export const BACKGROUND_SKILL_GROUPS = [
   {
     id: 'core',

@@ -12,94 +12,60 @@ import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import useTheme from '@/use/useTheme.js'
 import { BACKGROUND_SKILL_GROUPS } from '@/use/useBg.js'
 
-// Wide screens, once after the page opens:
-//   1. scatter: skills pop up one by one at random, evenly spread places all over the screen
-//      and float there for a moment;
-//   2. gather: from the top rows down, they glide with a faint tail into two columns beside
-//      the resume, grouped by meaning (see useBg.js), and softly turn into rows. Then they stay.
-// The canvas lies under the page content: skills behind the resume cards stay hidden until they
-// fly out to the columns, which sit in the free space beside the resume.
-// Screens without room beside the resume: skills keep appearing, floating and fading at random.
-
-// floating look: icon with the label under it (Simple Icons paths use a 24x24 box)
 const ICON_VIEWBOX = 24
 const ICON_SIZE_MIN = 26
 const ICON_SIZE_MAX = 38
 const LABEL_FONT_SIZE = 12
 const LABEL_GAP = 6
-// skills without an icon are drawn as a word
 const TEXT_FONT_SIZE = 15
 
-// docked look: a compact row "icon + name"
 const ROW_ICON_SIZE = 20
 const ROW_FONT_SIZE = 13
 const ROW_ICON_GAP = 8
 const ROW_HEIGHT = 28
-// vertical space between two groups in a column
 const GROUP_GAP = 18
 
-// columns: the content column is $contentMaxWidth (64rem) wide
 const CONTENT_MAX_WIDTH = 1024
-// distance between a column and the resume edge
 const COLUMN_GAP = 24
-// the widest row ("Composition API", or an icon + "Google Maps") needs about this much space
 const MIN_COLUMN_WIDTH = 140
-// first row sits below the header and the theme/language buttons
 const COLUMNS_TOP = 190
 const COLUMNS_BOTTOM_MARGIN = 40
-// free space kept between a row and the screen edge; a longer row wraps onto a second line
 const COLUMN_EDGE_MARGIN = 8
-// extra height of every wrapped line of a row
 const ROW_LINE_HEIGHT = 17
 
-// intro timeline, ms
 const INTRO_DELAY = 500
-// skills pop up at random moments within this window
 const APPEAR_WINDOW = 1600
 const APPEAR_DURATION = 700
-// everything is on screen and floats for a while before gathering starts
 const SCATTER_PAUSE = 1400
-// pause between two skills taking off, top rows first
 const GATHER_STAGGER = 110
 const FLIGHT_DURATION = 1800
-// the skill turns into a row during the last part of its flight, from this share on
 const FLIGHT_MORPH_START = 0.7
-// fade-in: grows from this scale to full size
 const APPEAR_SCALE = 0.85
-// bend of the flight path, px; all paths on one side bend the same way, so they do not cross
 const FLIGHT_CURVE = 70
-// faint tail behind a flying skill
 const TRAIL_LENGTH = 8
 const TRAIL_WIDTH = 1.5
 const TRAIL_OPACITY = 0.2
 
-// scatter points: kept off the header and away from each other
 const SCATTER_TOP = 80
 const SCATTER_MARGIN = 60
-// candidates per point for spreading points evenly ("best candidate" sampling)
 const SCATTER_CANDIDATES = 24
 
-// narrow screens: appear, float, fade out, reappear elsewhere; ms
 const SPAWN_WINDOW = 5000
 const FLOAT_LIFETIME_MIN = 6000
 const FLOAT_LIFETIME_MAX = 11000
 const RESPAWN_DELAY_MAX = 3000
 const FADE_DURATION = 800
 
-// floating motion, px per second
 const RISE_SPEED_MIN = 6
 const RISE_SPEED_MAX = 18
 const SWAY_AMPLITUDE = 10
-// radians per second
 const SWAY_SPEED = 0.35
 
-// pointer: skills within the radius are pushed away, then settle back
 const REPEL_RADIUS = 140
 const REPEL_FORCE = 0.8
 const DAMPING = 0.9
 
 const ACCENT_RGB = '30, 144, 255'
-// intro: clearly visible; narrow screens: a quiet background
 const INTRO_OPACITY_LIGHT = 0.6
 const INTRO_OPACITY_DARK = 0.7
 const FLOATING_OPACITY_LIGHT = 0.22
@@ -158,7 +124,6 @@ const measureText = (text) => {
 
 const getColumnAvailableWidth = () => getGutterWidth() - COLUMN_GAP - COLUMN_EDGE_MARGIN
 
-// splits the label by words so every line fits the column; a single long word stays on its line
 const splitRowLines = (skill) => {
   const maxTextWidth = getColumnAvailableWidth() - getRowIconWidth(skill)
 
@@ -179,7 +144,6 @@ const splitRowLines = (skill) => {
 const measureRowWidth = (particle) =>
   getRowIconWidth(particle) + Math.max(...particle.rowLines.map(measureText))
 
-// rows touch the resume edge; slot x is the row center, so both looks morph around one point
 const assignSlot = (particle) => {
   const gutterWidth = getGutterWidth()
   const edgeX = particle.isLeft ? gutterWidth - COLUMN_GAP : width - gutterWidth + COLUMN_GAP
@@ -217,17 +181,12 @@ const createParticle = (skill, isLeft, columnY) => ({
   swayPhase: randomBetween(0, Math.PI * 2),
   alpha: 0,
   scale: 1,
-  // 0 = floating look, 1 = row look
   rowness: 0,
   isLeft,
-  // row top within its column, groups included
   columnY,
   slot: null,
-  // width of the docked row, measured when the skill gets its slot
   rowWidth: 0,
-  // the docked label, split into lines when it is wider than the space beside the resume
   rowLines: [skill.label],
-  // columns: where the skill pops up and when it takes off
   scatterPoint: null,
   departAt: 0,
   appearedAt: null,
@@ -237,7 +196,6 @@ const createParticle = (skill, isLeft, columnY) => ({
   pushY: 0,
 })
 
-// lays the groups out one under another in their column, with a gap between groups
 const createParticles = () => {
   const isNarrow = width < MOBILE_BREAKPOINT
   const columnHeights = { left: 0, right: 0 }
@@ -267,7 +225,6 @@ const randomScatterPoint = () => ({
 const distanceToNearest = (point, points) =>
   Math.min(Infinity, ...points.map((other) => Math.hypot(other.x - point.x, other.y - point.y)))
 
-// evenly spread random points: each new point is the candidate farthest from the ones placed
 const spreadPoints = (count, taken = []) => {
   const points = []
 
@@ -284,8 +241,6 @@ const spreadPoints = (count, taken = []) => {
   return points
 }
 
-// left points go to the left column, and on each side higher points to higher rows:
-// flight paths run almost parallel and do not cross
 const pairScatterPoints = () => {
   const points = spreadPoints(particles.length).sort((a, b) => a.x - b.x)
   const byColumnY = (a, b) => a.columnY - b.columnY
@@ -323,7 +278,6 @@ const startFloating = (now) => {
   particles.forEach((particle) => scheduleSpawn(particle, now, SPAWN_WINDOW))
 }
 
-// the finished columns, without the intro (reduced motion, or a resize after the intro)
 const placeInColumns = () => {
   particles.forEach((particle) => {
     assignSlot(particle)
@@ -354,7 +308,6 @@ const appear = (particle, now) => {
     : now + randomBetween(FLOAT_LIFETIME_MIN, FLOAT_LIFETIME_MAX)
 }
 
-// all paths on one side bend the same way (mirrored for the other side)
 const getCurveControl = (from, to, isLeft) => {
   const dx = to.x - from.x
   const dy = to.y - from.y
@@ -385,7 +338,6 @@ const float = (particle, seconds) => {
   particle.y -= particle.riseSpeed * seconds
 }
 
-// fade-in right after appearing: 0 -> 1
 const getAppearProgress = (particle, now) =>
   particle.appearedAt === null ? 1 : clamp01((now - particle.appearedAt) / APPEAR_DURATION)
 
@@ -491,7 +443,6 @@ const drawFloating = (particle, x, y) => {
   ctx.fillText(particle.label, x, y + particle.size + LABEL_GAP)
 }
 
-// the row is centered at x, like the floating look
 const drawRow = (particle, x, y) => {
   const middleY = y + ROW_ICON_SIZE / 2
   const iconWidth = particle.path ? ROW_ICON_SIZE + ROW_ICON_GAP : 0
@@ -516,7 +467,6 @@ const drawRow = (particle, x, y) => {
   })
 }
 
-// comet tail: older points are thinner and fainter
 const drawTrail = (particle) => {
   const points = [...particle.trail, { x: particle.x, y: particle.y }]
 
@@ -556,12 +506,10 @@ const draw = () => {
       drawTrail(particle)
     }
 
-    // everything is drawn around (0, 0) so the skill scales around its own position
     ctx.save()
     ctx.translate(particle.x + particle.pushX, particle.y + particle.pushY)
     ctx.scale(particle.scale, particle.scale)
 
-    // crossfade between the two looks at the end of the flight
     if (particle.rowness < 1) {
       ctx.globalAlpha = particle.alpha * (1 - particle.rowness) * floatingOpacity
       drawFloating(particle, 0, 0)
@@ -581,7 +529,6 @@ const draw = () => {
 const hasAssembled = () => columnsMode && particles.every(({ state }) => state === STATE.DOCKED)
 
 const tick = (now) => {
-  // seconds since the previous frame: motion speed does not depend on the screen refresh rate
   const seconds = lastFrameTime === null ? 0 : (now - lastFrameTime) / 1000
   lastFrameTime = now
 
@@ -590,7 +537,6 @@ const tick = (now) => {
   rafId = requestAnimationFrame(tick)
 }
 
-// reduced motion: the finished picture, drawn once
 const showStill = () => {
   if (columnsMode) {
     placeInColumns()
@@ -640,8 +586,6 @@ const restart = () => {
   start()
 }
 
-// on mobile the height changes while scrolling (address bar): rebuild only on width change.
-// After the intro, the columns move to the new edges of the resume without replaying it
 const onResize = () => {
   const previousWidth = width
   const wasAssembled = hasAssembled()
@@ -681,7 +625,6 @@ const onPointerLeave = () => {
 
 const onVisibilityChange = () => (document.hidden ? stop() : start())
 
-// the animation loop picks up the new color itself; a still picture needs a redraw
 watch(
   () => getCurrentTheme.value.isDark,
   () => {

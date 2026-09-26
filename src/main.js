@@ -11,7 +11,6 @@ import '@/plugins/icons.js'
 import { ViteSSG } from 'vite-ssg/single-page'
 import App from './App.vue'
 
-// prerendered to static HTML at build time (vite-ssg build), mounted as usual in the browser
 export const createApp = ViteSSG(App, ({ app }) => {
   app.component('FontAwesomeIcon', FontAwesomeIcon)
   app.use(i18n)
