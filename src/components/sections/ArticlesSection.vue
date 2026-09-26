@@ -14,7 +14,14 @@
         :class="{ featured: article.featured }"
       >
         <a :href="article.link" target="_blank" rel="noopener noreferrer" class="article-link">
-          <img v-if="article.img" :alt="t(article.titleKey)" :src="article.img" class="img" />
+          <img
+            v-if="article.img"
+            :alt="t(article.titleKey)"
+            :src="article.img"
+            class="img"
+            loading="lazy"
+            decoding="async"
+          />
           <div v-else class="cover" aria-hidden="true">
             <FontAwesomeIcon :icon="article.coverIcon" />
           </div>
@@ -35,10 +42,10 @@
 
 <script setup>
 import { useI18n } from 'vue-i18n'
-import Article1 from '/public/images/article1.jfif'
-import Article2 from '/public/images/article2.jfif'
-import Article3 from '/public/images/article3.jfif'
-import Article4 from '/public/images/article4.jfif'
+import Article1 from '/public/images/article1.webp'
+import Article2 from '/public/images/article2.webp'
+import Article3 from '/public/images/article3.webp'
+import Article4 from '/public/images/article4.webp'
 
 const { t, locale } = useI18n()
 

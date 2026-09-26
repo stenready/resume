@@ -29,6 +29,7 @@ export default defineConfig(({ isSsrBuild }) => ({
   base: './',
   build: {
     outDir: 'dist',
+    cssCodeSplit: false,
     assetsInlineLimit: 4096, // файлы меньше 4 КБ инлайнятся в JS
     chunkSizeWarningLimit: 1500, // лимит предупреждения о размере чанка
     rollupOptions: {
