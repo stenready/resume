@@ -1,6 +1,7 @@
 :root {
-  --accent: #1e90ff;
-  --accent2: #105fa9;
+  --accent: #0a6ed1;
+  --accent2: #0b5aa6;
+  --on-accent: #ffffff;
   --card-bg: #ffffff;
   --border: #d1d5db;
   --text: #222222;
@@ -14,6 +15,9 @@
 }
 
 html[data-theme='dark'] {
+  --accent: #6cb4ff;
+  --accent2: #8cc4ff;
+  --on-accent: #07192f;
   --bg-color: #07192f;
   --card-color: #343d55;
   --text: #ffffff;

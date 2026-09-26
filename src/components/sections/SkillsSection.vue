@@ -1,10 +1,10 @@
 <template>
   <div data-component-name="SkillsSection" class="SkillsSection">
-    <div class="SkillsSection-title">
+    <h2 class="SkillsSection-title">
       <FontAwesomeIcon icon="fa-brands fa-dev" />
 
       {{ t('skills') }}
-    </div>
+    </h2>
 
     <dl class="skill-groups">
       <div v-for="(group, groupIdx) of tm('skillGroups')" :key="groupIdx" class="skill-group">
@@ -83,7 +83,7 @@ $groupTitleWidth: 13rem;
 
   .label-item {
     background-color: rgba(30, 144, 255, 0.15);
-    color: var(--accent);
+    color: var(--accent2);
     padding: 4px 12px;
     border-radius: 1rem;
     font-size: 0.9rem;
@@ -105,7 +105,6 @@ $groupTitleWidth: 13rem;
     }
 
     .skill-groups {
-      opacity: 0.9;
       padding: 0.5rem 1.25rem;
     }
 

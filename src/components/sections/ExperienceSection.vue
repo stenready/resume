@@ -1,9 +1,9 @@
 <template>
   <div data-component-name="ExperienceSection" class="ExperienceSection">
-    <div class="ExperienceSection-title">
+    <h2 class="ExperienceSection-title">
       <FontAwesomeIcon icon="fa-solid fa-trophy" />
       {{ t('myExperience') }}
-    </div>
+    </h2>
 
     <ol class="timeline">
       <li
@@ -233,7 +233,7 @@ $entryIndentMobile: 1.75rem;
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: var(--text);
-    opacity: 0.6;
+    opacity: 0.75;
     margin-bottom: 0.75rem;
 
     .duration {
@@ -344,7 +344,7 @@ $entryIndentMobile: 1.75rem;
 
   .label-item {
     background-color: rgba(30, 144, 255, 0.15);
-    color: var(--accent);
+    color: var(--accent2);
     padding: 4px 12px;
     border-radius: 1rem;
     font-size: 0.85rem;
@@ -366,7 +366,6 @@ $entryIndentMobile: 1.75rem;
     }
 
     .timeline {
-      opacity: 0.9;
       padding: 1.5rem 1.25rem;
     }
 

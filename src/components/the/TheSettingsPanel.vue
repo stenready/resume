@@ -1,12 +1,24 @@
 <template>
   <div data-component-name="TheSettingsPanel" class="TheSettingsPanel">
-    <BaseButton id="theme-btn" aria-label="theme" @click="onChangeTheme" size="small" type="main">
+    <BaseButton
+      id="theme-btn"
+      :aria-label="getCurrentTheme?.isDark ? 'Light theme' : 'Dark theme'"
+      @click="onChangeTheme"
+      size="small"
+      type="main"
+    >
       <template #icon>
         {{ getCurrentTheme?.themeIcon }}
       </template>
     </BaseButton>
 
-    <BaseButton id="lang-btn" aria-label="lang" @click="onChangeLocale" size="small" type="main">
+    <BaseButton
+      id="lang-btn"
+      :aria-label="`Language: ${appLocale}`"
+      @click="onChangeLocale"
+      size="small"
+      type="main"
+    >
       <div class="to-uppercase font-500">
         {{ appLocale }}
       </div>

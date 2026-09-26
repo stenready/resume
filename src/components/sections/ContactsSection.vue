@@ -1,11 +1,11 @@
 <template>
   <div data-component-name="ContactsSection" class="ContactsSection">
     <div class="wrapper">
-      <div class="ContactsSection-title">
+      <h2 class="ContactsSection-title">
         <FontAwesomeIcon icon="fa-id-card" />
 
         {{ t('contacts') }}
-      </div>
+      </h2>
 
       <div class="contacts-wrap">
         <div class="message">
@@ -15,10 +15,10 @@
         <div class="buttons-wrap">
           <BaseButton
             id="email-contact"
-            :aria-label="SOCIAL_LINKS.EMAIL"
             :is-link="true"
             type="rounded-outline"
             class="with-icon"
+            tag="div"
           >
             <a :href="`mailto:${SOCIAL_LINKS.EMAIL}`">
               <FontAwesomeIcon icon="fa-solid fa-envelope" />
@@ -28,12 +28,12 @@
 
           <BaseButton
             id="LinkedIn-contact"
-            aria-label="LinkedIn"
             :is-link="true"
             type="rounded-outline"
             class="with-icon"
+            tag="div"
           >
-            <a :href="SOCIAL_LINKS.LINKED_IN" target="_blank">
+            <a :href="SOCIAL_LINKS.LINKED_IN" target="_blank" rel="noopener noreferrer">
               <FontAwesomeIcon icon="fa-brands fa-linkedin" />
               LinkedIn
             </a>
@@ -41,12 +41,12 @@
 
           <BaseButton
             id="telegram-contact"
-            aria-label="Telegram"
             :is-link="true"
             type="rounded-outline"
             class="with-icon"
+            tag="div"
           >
-            <a :href="SOCIAL_LINKS.TG" target="_blank">
+            <a :href="SOCIAL_LINKS.TG" target="_blank" rel="noopener noreferrer">
               <FontAwesomeIcon icon="fa-brands fa-telegram" />
               Telegram
             </a>
@@ -54,12 +54,12 @@
 
           <BaseButton
             id="instagram-contact"
-            aria-label="Instagram"
             :is-link="true"
             type="rounded-outline"
             class="with-icon"
+            tag="div"
           >
-            <a :href="SOCIAL_LINKS.INSTAGRAM" target="_blank">
+            <a :href="SOCIAL_LINKS.INSTAGRAM" target="_blank" rel="noopener noreferrer">
               <FontAwesomeIcon icon="fa-brands fa-instagram" />
               Instagram
             </a>
@@ -67,12 +67,12 @@
 
           <BaseButton
             id="whatsapp-contact"
-            aria-label="WhatsApp"
             :is-link="true"
             type="rounded-outline"
             class="with-icon"
+            tag="div"
           >
-            <a :href="SOCIAL_LINKS.WHATSAPP" target="_blank">
+            <a :href="SOCIAL_LINKS.WHATSAPP" target="_blank" rel="noopener noreferrer">
               <FontAwesomeIcon icon="fa-brands fa-whatsapp" />
               WhatsApp
             </a>
@@ -80,10 +80,10 @@
 
           <BaseButton
             id="viber-contact"
-            aria-label="Viber"
             :is-link="true"
             type="rounded-outline"
             class="with-icon"
+            tag="div"
           >
             <a :href="SOCIAL_LINKS.VIBER">
               <FontAwesomeIcon icon="fa-brands fa-viber" />
@@ -93,12 +93,12 @@
 
           <BaseButton
             id="github-contact"
-            aria-label="GitHub"
             :is-link="true"
             type="rounded-outline"
             class="with-icon"
+            tag="div"
           >
-            <a :href="SOCIAL_LINKS.GITHUB_RESUME" target="_blank">
+            <a :href="SOCIAL_LINKS.GITHUB_RESUME" target="_blank" rel="noopener noreferrer">
               <FontAwesomeIcon icon="fa-brands fa-github" />
               GitHub
             </a>
@@ -181,7 +181,6 @@ const { t } = useI18n()
     }
 
     .message {
-      opacity: 0.9;
       border-radius: 12px;
       font-size: 1.25rem !important;
       padding: 28px 24px;

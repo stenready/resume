@@ -2,42 +2,66 @@
   <div data-component-name="AboutMeSection" class="AboutMeSection d-flex">
     <div class="left-info">
       <div class="my-avatar">
-        <img class="img-avatar" :alt="t('fullName')" src="/images/avatar.jpg" />
+        <img
+          class="img-avatar"
+          :alt="`${t('fullName')} — ${t('jobTitle')}`"
+          src="/images/avatar.jpg"
+        />
       </div>
 
       <div class="buttons">
-        <BaseButton id="Linkedin-btn" aria-label="LinkedIn" type="social">
-          <a :href="SOCIAL_LINKS.LINKED_IN" target="_blank">
+        <BaseButton id="Linkedin-btn" type="social" tag="div">
+          <a
+            :href="SOCIAL_LINKS.LINKED_IN"
+            target="_blank"
+            aria-label="LinkedIn"
+            rel="noopener noreferrer"
+          >
             <FontAwesomeIcon icon="fa-brands fa-linkedin" />
           </a>
         </BaseButton>
 
-        <BaseButton id="Telegram-btn" aria-label="Telegram" type="social">
-          <a :href="SOCIAL_LINKS.TG" target="_blank">
+        <BaseButton id="Telegram-btn" type="social" tag="div">
+          <a
+            :href="SOCIAL_LINKS.TG"
+            target="_blank"
+            aria-label="Telegram"
+            rel="noopener noreferrer"
+          >
             <FontAwesomeIcon icon="fa-brands fa-telegram" />
           </a>
         </BaseButton>
 
-        <BaseButton id="Instagram-btn" aria-label="Instagram" type="social">
-          <a :href="SOCIAL_LINKS.INSTAGRAM" target="_blank">
+        <BaseButton id="Instagram-btn" type="social" tag="div">
+          <a
+            :href="SOCIAL_LINKS.INSTAGRAM"
+            target="_blank"
+            aria-label="Instagram"
+            rel="noopener noreferrer"
+          >
             <FontAwesomeIcon icon="fa-brands fa-instagram" />
           </a>
         </BaseButton>
 
-        <BaseButton id="WhatsApp-btn" aria-label="WhatsApp" type="social">
-          <a :href="SOCIAL_LINKS.WHATSAPP" target="_blank">
+        <BaseButton id="WhatsApp-btn" type="social" tag="div">
+          <a
+            :href="SOCIAL_LINKS.WHATSAPP"
+            target="_blank"
+            aria-label="WhatsApp"
+            rel="noopener noreferrer"
+          >
             <FontAwesomeIcon icon="fa-brands fa-whatsapp" />
           </a>
         </BaseButton>
 
-        <BaseButton id="Viber-btn" aria-label="Viber" type="social">
-          <a :href="SOCIAL_LINKS.VIBER">
+        <BaseButton id="Viber-btn" type="social" tag="div">
+          <a :href="SOCIAL_LINKS.VIBER" aria-label="Viber">
             <FontAwesomeIcon icon="fa-brands fa-viber" />
           </a>
         </BaseButton>
 
-        <BaseButton id="email-btn" aria-label="Email" type="social">
-          <a :href="`mailto:${SOCIAL_LINKS.EMAIL}`">
+        <BaseButton id="email-btn" type="social" tag="div">
+          <a :href="`mailto:${SOCIAL_LINKS.EMAIL}`" aria-label="Email">
             <FontAwesomeIcon icon="fa-solid fa-envelope" />
           </a>
         </BaseButton>
@@ -65,12 +89,7 @@
         </i18n-t>
 
         <div class="hero-actions">
-          <BaseButton
-            :aria-label="t('downloadResume')"
-            :is-link="true"
-            id="download-resume-btn"
-            type="rounded-outline"
-          >
+          <BaseButton :is-link="true" id="download-resume-btn" type="rounded-outline" tag="div">
             <a :download="resumeFileName" :href="`/files/${resumeFileName}`">
               <FontAwesomeIcon icon="fa-solid fa-file-arrow-down" class="icon-download" />
 
@@ -78,12 +97,7 @@
             </a>
           </BaseButton>
 
-          <BaseButton
-            :aria-label="t('contactMe')"
-            :is-link="true"
-            id="contact-me-btn"
-            type="rounded-outline"
-          >
+          <BaseButton :is-link="true" id="contact-me-btn" type="rounded-outline" tag="div">
             <a :href="`#${SECTIONS_NAMES.CONTACTS}`" @click.prevent="onScrollToContacts">
               <FontAwesomeIcon icon="fa-solid fa-envelope" />
 
@@ -410,7 +424,6 @@ $paddingContainer: 1.25rem 0;
 
   @include maxWidth(1024) {
     padding: 0;
-    opacity: 0.9;
     flex-direction: column;
     align-items: center;
     margin-top: 1rem;

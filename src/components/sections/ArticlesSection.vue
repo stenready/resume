@@ -1,10 +1,10 @@
 <template>
   <div data-component-name="ArticlesSessions" class="ArticlesSessions">
-    <div class="ArticlesSessions-title">
+    <h2 class="ArticlesSessions-title">
       <FontAwesomeIcon icon="fa-solid fa-newspaper" />
 
       {{ t('articles') }}
-    </div>
+    </h2>
 
     <ul class="articles-list">
       <li
@@ -165,7 +165,7 @@ $imageHeight: 200px;
     letter-spacing: 0.03em;
     text-transform: uppercase;
     color: var(--text);
-    opacity: 0.6;
+    opacity: 0.75;
   }
 
   .title {
@@ -196,7 +196,6 @@ $imageHeight: 200px;
     }
 
     .article-item {
-      opacity: 0.9;
     }
   }
 }

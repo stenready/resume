@@ -1,9 +1,9 @@
 <template>
   <div data-component-name="ProjectsSection" class="ProjectsSection">
-    <div class="ProjectsSection-title">
+    <h2 class="ProjectsSection-title">
       <FontAwesomeIcon icon="fa-solid fa-layer-group" />
       {{ t('projects') }}
-    </div>
+    </h2>
 
     <ul class="projects-list">
       <li v-for="project of PROJECTS" :key="project.id" class="project-card">
@@ -101,7 +101,7 @@ const PROJECTS = [
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: var(--text);
-    opacity: 0.6;
+    opacity: 0.75;
   }
 
   .project-title {
@@ -171,7 +171,7 @@ const PROJECTS = [
 
   .label-item {
     background-color: rgba(30, 144, 255, 0.15);
-    color: var(--accent);
+    color: var(--accent2);
     padding: 3px 10px;
     border-radius: 1rem;
     font-size: 0.8rem;
@@ -198,7 +198,6 @@ const PROJECTS = [
     }
 
     .project-card {
-      opacity: 0.9;
       padding: 1.25rem;
     }
   }

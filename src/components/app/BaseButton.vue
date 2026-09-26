@@ -1,19 +1,20 @@
 <template>
-  <button
-    :aria-label="ariaLabel"
+  <component
+    :is="tag"
+    :aria-label="ariaLabel || undefined"
     v-bind="attrs"
     :class="[classes]"
     :id="id"
     data-component-name="BaseButton"
     class="BaseButton"
-    type="button"
+    :type="tag === 'button' ? 'button' : undefined"
   >
     <span v-if="$slots.icon" class="icon">
       <slot name="icon"></slot>
     </span>
 
     <slot></slot>
-  </button>
+  </component>
 </template>
 
 <script setup>
@@ -29,7 +30,12 @@ const props = defineProps({
   ariaLabel: {
     type: String,
     default: '',
-    required: true,
+    required: false,
+  },
+  tag: {
+    type: String,
+    default: 'button',
+    required: false,
   },
   isLink: {
     type: Boolean,
@@ -102,7 +108,7 @@ $paddingSmall: 0.55rem;
 
   &:hover {
     background: var(--accent);
-    color: #fff;
+    color: var(--on-accent);
     box-shadow: 0 6px 12px var(--accent);
     transform: translateY(-2px);
   }
@@ -157,7 +163,7 @@ $paddingSmall: 0.55rem;
 
     &:hover {
       background-color: var(--accent);
-      color: var(--white);
+      color: var(--on-accent);
       transform: none;
     }
   }

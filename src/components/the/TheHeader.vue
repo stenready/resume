@@ -9,9 +9,9 @@
       @click.prevent="onScrollToSection(menuListItems?.[0]?.id)"
       href="#about"
       class="link-logo"
-      :aria-label="t('logo')"
       :title="t('logo')"
-      >&lt;SR/&gt;</a
+      ><span aria-hidden="true">&lt;SR/&gt;</span
+      ><span class="visually-hidden">{{ t('logo') }}</span></a
     >
 
     <nav class="nav" aria-label="Main navigation" ref="navRef">
@@ -198,7 +198,7 @@ $headerMinSidePadding: 1rem;
     padding: 0 0.6rem;
     border-radius: 0.6rem;
     background: var(--accent);
-    color: var(--white);
+    color: var(--on-accent);
     font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     font-size: 0.95rem;
     font-weight: 700;
@@ -242,7 +242,7 @@ $headerMinSidePadding: 1rem;
       }
 
       &.active {
-        color: var(--white);
+        color: var(--on-accent);
         background: var(--accent);
         box-shadow: 0 4px 14px var(--shadow-light);
       }
