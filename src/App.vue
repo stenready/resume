@@ -2,7 +2,6 @@
   <div class="app" data-page-name="App">
     <TheBg />
     <TheHeader />
-    <TheSettingsPanel />
 
     <main>
       <section :id="SECTIONS_NAMES.ABOUT_ME">
@@ -38,7 +37,6 @@
 import { SECTIONS_NAMES } from '@/constants'
 import TheBg from '@/components/the/TheBg.vue'
 import TheHeader from '@/components/the/TheHeader.vue'
-import TheSettingsPanel from '@/components/the/TheSettingsPanel.vue'
 import TheFooter from '@/components/the/TheFooter.vue'
 import AboutMeSection from '@/components/sections/AboutMeSection.vue'
 import ExperienceSection from '@/components/sections/ExperienceSection.vue'

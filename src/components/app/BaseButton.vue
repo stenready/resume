@@ -22,7 +22,7 @@ withDefaults(
     ariaLabel?: string
     tag?: 'button' | 'a'
     size?: 'small' | ''
-    variant?: 'main' | 'social' | 'rounded-outline'
+    variant?: 'main' | 'social' | 'rounded-outline' | 'primary'
   }>(),
   {
     ariaLabel: '',
@@ -80,15 +80,31 @@ $paddingSmall: 0.55rem;
     }
   }
 
+  &.primary,
   &.rounded-outline {
-    background-color: var(--card-color);
-    color: var(--accent);
-    border: 2px solid var(--accent);
     border-radius: 2rem;
     font-weight: 600;
     font-size: 1rem;
     gap: 10px;
     box-shadow: none;
+  }
+
+  &.primary {
+    background-color: var(--accent);
+    color: var(--on-accent);
+    border: 2px solid var(--accent);
+
+    &:hover {
+      background-color: var(--accent2);
+      border-color: var(--accent2);
+      box-shadow: 0 8px 20px var(--shadow-light);
+    }
+  }
+
+  &.rounded-outline {
+    background-color: var(--card-color);
+    color: var(--accent);
+    border: 2px solid var(--accent);
 
     &:hover {
       background-color: var(--accent);

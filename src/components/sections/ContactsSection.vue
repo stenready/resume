@@ -84,7 +84,7 @@ const contacts = CONTACT_KEYS.map((key) => ({ key, ...SOCIAL_CONTACTS[key] }))
   .contacts-wrap {
     .message {
       font-size: 1.25rem;
-      margin-bottom: 2rem;
+      margin-bottom: 1.25rem;
       font-weight: 600;
       color: var(--text);
       line-height: 1.7;
@@ -112,10 +112,8 @@ const contacts = CONTACT_KEYS.map((key) => ({ key, ...SOCIAL_CONTACTS[key] }))
     }
 
     .message {
-      border-radius: 12px;
-      font-size: 1.25rem !important;
-      padding: 28px 24px;
-      background: var(--card-bg);
+      font-size: 1.1rem !important;
+      text-align: center;
     }
 
     .buttons-wrap {

@@ -37,41 +37,17 @@ const { appLocale, onChangeLocale } = useLanguage()
 
 <style lang="scss">
 @use '@/assets/vars' as *;
-@use '@/assets/mixins' as *;
-
-$settingsPanelTopMobile: 4rem;
 
 .TheSettingsPanel {
-  position: fixed;
-  right: 2rem;
   display: flex;
-  flex-direction: column;
-  gap: 0.7rem;
-  top: 1.9rem;
-  z-index: 10;
+  flex-shrink: 0;
+  gap: 0.4rem;
 
   .BaseButton {
-    width: 40px;
-    height: 40px;
-
-    @include maxWidth(1120) {
-      width: 30px;
-      height: 30px;
-    }
-  }
-
-  @include minWidth(1025) {
-    top: 4.25rem;
-  }
-
-  @include maxWidth(1024) {
-    position: absolute;
-    transform: translateX(-50%);
-    left: 50%;
-    top: $settingsPanelTopMobile;
-    flex-direction: row;
-    justify-content: center;
-    width: 100%;
+    width: $headerLogoHeight;
+    height: $headerLogoHeight;
+    padding: 0;
+    font-size: 1rem;
   }
 }
 </style>
