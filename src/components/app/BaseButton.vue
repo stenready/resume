@@ -1,13 +1,11 @@
 <template>
   <component
     :is="tag"
-    :aria-label="ariaLabel || undefined"
-    v-bind="attrs"
-    :class="[classes]"
     :id="id"
-    data-component-name="BaseButton"
-    class="BaseButton"
+    :aria-label="ariaLabel || undefined"
     :type="tag === 'button' ? 'button' : undefined"
+    :class="['BaseButton', variant, size]"
+    data-component-name="BaseButton"
   >
     <span v-if="$slots.icon" class="icon">
       <slot name="icon"></slot>
@@ -17,70 +15,37 @@
   </component>
 </template>
 
-<script setup>
-import { computed, useAttrs } from 'vue'
+<script>
+const TAGS = ['button', 'a']
+const SIZES = ['small', '']
+const VARIANTS = ['main', 'social', 'rounded-outline']
+</script>
 
-//props
-const props = defineProps({
+<script setup>
+defineProps({
   id: {
     type: String,
-    default: '',
     required: true,
   },
   ariaLabel: {
     type: String,
     default: '',
-    required: false,
   },
   tag: {
     type: String,
     default: 'button',
-    required: false,
-  },
-  isLink: {
-    type: Boolean,
-    default: false,
-    required: false,
+    validator: (value) => TAGS.includes(value),
   },
   size: {
     type: String,
     default: '',
-    required: false,
-    validator: (value) => {
-      const validTypes = ['small', '']
-      return validTypes.includes(value)
-    },
+    validator: (value) => SIZES.includes(value),
   },
-  type: {
+  variant: {
     type: String,
     default: 'main',
-    required: false,
-    validator: (value) => {
-      const validTypes = ['rounded', 'circle', 'main', 'social', 'rounded-outline']
-      return validTypes.includes(value)
-    },
+    validator: (value) => VARIANTS.includes(value),
   },
-})
-
-///vars
-const attrs = useAttrs()
-
-//computed
-const classes = computed(() => {
-  let classNames = ''
-  if (props?.size) {
-    classNames += ' ' + props?.size
-  }
-
-  if (props.type) {
-    classNames += ' ' + props?.type
-  }
-
-  if (props.isLink) {
-    classNames += ' ' + 'link-btn'
-  }
-
-  return classNames
 })
 </script>
 
@@ -95,6 +60,7 @@ $paddingSmall: 0.55rem;
   border-radius: 8px;
   cursor: pointer;
   font-size: 1.2rem;
+  text-decoration: none;
   padding: $buttonPadding;
   display: flex;
   align-items: center;
@@ -122,17 +88,8 @@ $paddingSmall: 0.55rem;
     width: 2.5rem;
     height: 2.5rem;
     border-radius: 50%;
+    font-size: 1.25rem;
     transform-origin: center;
-
-    a {
-      color: inherit !important;
-      font-size: 1.25rem;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
 
     &:hover {
       transform: scale(1.15);
@@ -146,20 +103,8 @@ $paddingSmall: 0.55rem;
     border-radius: 2rem;
     font-weight: 600;
     font-size: 1rem;
+    gap: 10px;
     box-shadow: none;
-
-    &.link-btn {
-      padding: 0;
-
-      a {
-        color: inherit !important;
-        text-decoration: none;
-        padding: $buttonPadding;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-    }
 
     &:hover {
       background-color: var(--accent);

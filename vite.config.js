@@ -50,26 +50,7 @@ export default defineConfig(({ isSsrBuild }) => ({
       compress: {
         drop_console: true, // удаляем console.log в продакшене
         drop_debugger: true,
-        arrows: true, // оптимизация стрелочных функций
-        booleans: true, // оптимизация булевых значений
-        collapse_vars: true, // сворачивание переменных
-        comparisons: true, // оптимизация сравнений
-        dead_code: true, // удаление мертвого кода
-        evaluate: true, // вычисление константных выражений
-        hoist_funs: true, // подъем объявлений функций
-        hoist_props: true, // оптимизация свойств объектов
-        join_vars: true, // объединение var
-        loops: true, // оптимизация циклов
-        reduce_funcs: true, // удаление неиспользуемых функций
-        reduce_vars: true, // удаление неиспользуемых переменных
-        sequences: true, // объединение выражений
-        side_effects: true, // удаление вызовов без побочных эффектов
-        switches: true, // оптимизация switch
-        unused: true, // удаление неиспользуемого кода
         passes: 2,
-      },
-      format: {
-        comments: true,
       },
     },
   },

@@ -1,5 +1,9 @@
 {
   "logo": "Stanislav Radchenko",
+  "mainNavigation": "Main navigation",
+  "lightTheme": "Light theme",
+  "darkTheme": "Dark theme",
+  "languageSwitch": "Language: {locale}",
   "aboutMe": "About Me",
   "myExperience": "My Experience",
   "skills": "Skills",
@@ -55,10 +59,6 @@
   "article5": "Force-changing my country on Djinni: why validation must live on the backend too",
   "writeMeMessage": "Open to Frontend roles — remote, hybrid, on-site or relocation. The fastest way to reach me is email or Telegram.",
   "footerText": "© {year} Stanislav Radchenko",
-  "cardProduct10": "users and business needs.",
-  "metaName": "Stanislav Radchenko",
-  "resume": "Resume",
-  "metaDesc": "Frontend-reseller, focused on folding business add-ons.\nI create highly innovative client-administrative systems that help businesses scale up and help traders to operate without hesitation.",
   "projectItems": {
     "pos": {
       "meta": "Planeta Kino · since 2022",

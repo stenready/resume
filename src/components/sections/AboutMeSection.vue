@@ -13,64 +13,21 @@
       </div>
 
       <div class="buttons">
-        <BaseButton id="Linkedin-btn" type="social" tag="div">
-          <a
-            :href="SOCIAL_LINKS.LINKED_IN"
-            target="_blank"
-            aria-label="LinkedIn"
-            rel="noopener noreferrer"
-          >
-            <FontAwesomeIcon icon="fa-brands fa-linkedin" />
-          </a>
-        </BaseButton>
-
-        <BaseButton id="Telegram-btn" type="social" tag="div">
-          <a
-            :href="SOCIAL_LINKS.TG"
-            target="_blank"
-            aria-label="Telegram"
-            rel="noopener noreferrer"
-          >
-            <FontAwesomeIcon icon="fa-brands fa-telegram" />
-          </a>
-        </BaseButton>
-
-        <BaseButton id="Instagram-btn" type="social" tag="div">
-          <a
-            :href="SOCIAL_LINKS.INSTAGRAM"
-            target="_blank"
-            aria-label="Instagram"
-            rel="noopener noreferrer"
-          >
-            <FontAwesomeIcon icon="fa-brands fa-instagram" />
-          </a>
-        </BaseButton>
-
-        <BaseButton id="WhatsApp-btn" type="social" tag="div">
-          <a
-            :href="SOCIAL_LINKS.WHATSAPP"
-            target="_blank"
-            aria-label="WhatsApp"
-            rel="noopener noreferrer"
-          >
-            <FontAwesomeIcon icon="fa-brands fa-whatsapp" />
-          </a>
-        </BaseButton>
-
-        <BaseButton id="Viber-btn" type="social" tag="div">
-          <a :href="SOCIAL_LINKS.VIBER" aria-label="Viber">
-            <FontAwesomeIcon icon="fa-brands fa-viber" />
-          </a>
-        </BaseButton>
-
-        <BaseButton id="email-btn" type="social" tag="div">
-          <a :href="`mailto:${SOCIAL_LINKS.EMAIL}`" aria-label="Email">
-            <FontAwesomeIcon icon="fa-solid fa-envelope" />
-          </a>
+        <BaseButton
+          v-for="social of heroSocials"
+          :id="`${social.key}-btn`"
+          :key="social.key"
+          :href="social.href"
+          :aria-label="social.name"
+          v-bind="social.isExternal ? EXTERNAL_LINK_ATTRS : {}"
+          tag="a"
+          variant="social"
+        >
+          <FontAwesomeIcon :icon="social.icon" />
         </BaseButton>
       </div>
     </div>
-    <!--    ////-->
+
     <div class="right-info">
       <div class="hero">
         <h1 class="full-name">{{ t('fullName') }}</h1>
@@ -92,20 +49,29 @@
         </i18n-t>
 
         <div class="hero-actions">
-          <BaseButton :is-link="true" id="download-resume-btn" type="rounded-outline" tag="div">
-            <a :download="resumeFileName" :href="`/files/${resumeFileName}`">
-              <FontAwesomeIcon icon="fa-solid fa-file-arrow-down" class="icon-download" />
+          <BaseButton
+            id="download-resume-btn"
+            :href="`/files/${resumeFileName}`"
+            :download="resumeFileName"
+            tag="a"
+            variant="rounded-outline"
+            class="hero-action"
+          >
+            <FontAwesomeIcon icon="fa-solid fa-file-arrow-down" class="icon-download" />
 
-              {{ t('downloadResume') }}
-            </a>
+            {{ t('downloadResume') }}
           </BaseButton>
 
-          <BaseButton :is-link="true" id="contact-me-btn" type="rounded-outline" tag="div">
-            <a :href="`#${SECTIONS_NAMES.CONTACTS}`" @click.prevent="onScrollToContacts">
-              <FontAwesomeIcon icon="fa-solid fa-envelope" />
+          <BaseButton
+            id="contact-me-btn"
+            :href="`#${SECTIONS_NAMES.CONTACTS}`"
+            tag="a"
+            variant="rounded-outline"
+            class="hero-action"
+          >
+            <FontAwesomeIcon icon="fa-solid fa-envelope" />
 
-              {{ t('contactMe') }}
-            </a>
+            {{ t('contactMe') }}
           </BaseButton>
         </div>
       </div>
@@ -163,12 +129,14 @@
 
 <script setup>
 import { useI18n } from 'vue-i18n'
-import { computed, defineAsyncComponent } from 'vue'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { PLANETA_KINO_URL, SECTIONS_NAMES, SOCIAL_LINKS } from '@/constants.js'
-import { scrollWindowToSelector } from '@/helpers/index.js'
-
-const BaseButton = defineAsyncComponent(() => import('@/components/app/BaseButton.vue'))
+import { computed } from 'vue'
+import {
+  EXTERNAL_LINK_ATTRS,
+  PLANETA_KINO_URL,
+  SECTIONS_NAMES,
+  SOCIAL_CONTACTS,
+} from '@/constants.js'
+import BaseButton from '@/components/app/BaseButton.vue'
 
 const { t, locale } = useI18n()
 
@@ -229,10 +197,9 @@ const LANGUAGE_KEYS = [
 
 const GROWTH_KEYS = ['growthEnglish', 'growthNode', 'growthReact']
 
-const onScrollToContacts = () => {
-  const headerHeight = document.querySelector('.TheHeader')?.offsetHeight || 0
-  scrollWindowToSelector(`#${SECTIONS_NAMES.CONTACTS}`, headerHeight)
-}
+const HERO_SOCIAL_KEYS = ['linkedIn', 'telegram', 'instagram', 'whatsApp', 'viber', 'email']
+
+const heroSocials = HERO_SOCIAL_KEYS.map((key) => ({ key, ...SOCIAL_CONTACTS[key] }))
 </script>
 
 <style scoped lang="scss">
@@ -453,7 +420,7 @@ $paddingContainer: 1.25rem 0;
       font-size: 1.25rem;
     }
 
-    .link-btn {
+    .hero-action {
       width: 100%;
     }
 

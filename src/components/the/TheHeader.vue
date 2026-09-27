@@ -3,34 +3,28 @@
     data-component-name="TheHeader"
     class="centered-auto d-flex align-items-center justify-between TheHeader"
     :class="{ 'is-scrolled': isScrolled }"
-    ref="headerRef"
   >
     <a
-      @click.prevent="onScrollToSection(menuListItems?.[0]?.id)"
-      href="#about"
+      :href="`#${SECTIONS_NAMES.ABOUT_ME}`"
       class="link-logo"
       :title="t('logo')"
+      @click="onNavigate(SECTIONS_NAMES.ABOUT_ME)"
       ><span aria-hidden="true">&lt;SR/&gt;</span
       ><span class="visually-hidden">{{ t('logo') }}</span></a
     >
 
-    <nav class="nav" aria-label="Main navigation" ref="navRef">
+    <nav class="nav" :aria-label="t('mainNavigation')" ref="navRef">
       <ul class="nav-container d-flex align-items-center">
-        <li
-          @click.prevent="onScrollToSection(menuListItem?.id)"
-          v-for="menuListItem of menuListItems"
-          :key="menuListItem?.id"
-          class="nav-item"
-          :aria-label="menuListItem?.title"
-        >
+        <li v-for="menuListItem of menuListItems" :key="menuListItem.id" class="nav-item">
           <a
-            :href="`#${menuListItem?.id}`"
-            :id="`${menuListItem?.id}-link`"
-            :class="[{ active: activeId === menuListItem?.id }]"
-            :aria-current="activeId === menuListItem?.id ? 'location' : undefined"
+            :href="`#${menuListItem.id}`"
+            :id="`${menuListItem.id}-link`"
+            :class="{ active: activeId === menuListItem.id }"
+            :aria-current="activeId === menuListItem.id ? 'location' : undefined"
             class="nav-item-link"
+            @click="onNavigate(menuListItem.id)"
           >
-            {{ menuListItem?.title }}
+            {{ menuListItem.title }}
           </a>
         </li>
       </ul>
@@ -42,30 +36,30 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { SECTIONS_NAMES } from '@/constants.js'
-import { scrollWindowToSelector } from '@/helpers/index.js'
 
 const SCROLLED_THRESHOLD = 8
+const NAVIGATION_FALLBACK_MS = 1000
+const VISIBILITY_THRESHOLDS = [0.15, 0.3, 0.45, 0.6, 0.75, 0.85, 1.0]
 
-const activeId = ref(null)
-const headerRef = ref(null)
+const activeId = ref(SECTIONS_NAMES.ABOUT_ME)
 const navRef = ref(null)
 const isScrolled = ref(false)
-///
+
 let sections = []
 let observer = null
+let isNavigating = false
+let navigationTimer = null
 
 const { t } = useI18n()
 
-const menuListItems = computed(() => {
-  return [
-    { id: SECTIONS_NAMES.ABOUT_ME, title: t('aboutMe') },
-    { id: SECTIONS_NAMES.EXPERIENCE, title: t('myExperience') },
-    { id: SECTIONS_NAMES.PROJECTS, title: t('projects') },
-    { id: SECTIONS_NAMES.SKILLS, title: t('skills') },
-    { id: SECTIONS_NAMES.ARTICLES, title: t('articles') },
-    { id: SECTIONS_NAMES.CONTACTS, title: t('contacts') },
-  ]
-})
+const menuListItems = computed(() => [
+  { id: SECTIONS_NAMES.ABOUT_ME, title: t('aboutMe') },
+  { id: SECTIONS_NAMES.EXPERIENCE, title: t('myExperience') },
+  { id: SECTIONS_NAMES.PROJECTS, title: t('projects') },
+  { id: SECTIONS_NAMES.SKILLS, title: t('skills') },
+  { id: SECTIONS_NAMES.ARTICLES, title: t('articles') },
+  { id: SECTIONS_NAMES.CONTACTS, title: t('contacts') },
+])
 
 const onScroll = () => {
   isScrolled.value = window.scrollY > SCROLLED_THRESHOLD
@@ -79,80 +73,61 @@ watch(activeId, (id) => {
   })
 })
 
+const onIntersect = (entries) => {
+  // while a menu click scrolls the page, sections flying by must not steal the highlight
+  if (isNavigating) {
+    return
+  }
+
+  let mostVisibleEntry = null
+  let highestRatio = 0
+
+  entries.forEach((entry) => {
+    if (entry.isIntersecting && entry.intersectionRatio > highestRatio) {
+      highestRatio = entry.intersectionRatio
+      mostVisibleEntry = entry
+    }
+  })
+
+  if (mostVisibleEntry) {
+    activeId.value = mostVisibleEntry.target.id
+  }
+
+  const lastSection = sections.at(-1)
+  const rect = lastSection.getBoundingClientRect()
+  if (rect.bottom <= window.innerHeight && rect.top >= 0) {
+    activeId.value = lastSection.id
+  }
+}
+
+const stopNavigating = () => {
+  isNavigating = false
+  clearTimeout(navigationTimer)
+}
+
+const onNavigate = (sectionId) => {
+  activeId.value = sectionId
+  isNavigating = true
+  clearTimeout(navigationTimer)
+  navigationTimer = setTimeout(stopNavigating, NAVIGATION_FALLBACK_MS)
+  window.addEventListener('scrollend', stopNavigating, { once: true })
+}
+
 onMounted(() => {
   onScroll()
   window.addEventListener('scroll', onScroll, { passive: true })
 
-  sections = Array.from(document.querySelectorAll('section'))
-  setupIntersectionObserver()
-  setTimeout(() => {
-    activeId.value = SECTIONS_NAMES.ABOUT_ME
-  }, 150)
+  sections = Array.from(document.querySelectorAll('main > section'))
+  observer = new IntersectionObserver(onIntersect, { threshold: VISIBILITY_THRESHOLDS })
+  sections.forEach((section) => observer.observe(section))
 })
 
 onBeforeUnmount(() => {
   window.removeEventListener('scroll', onScroll)
-
-  if (observer) {
-    observer.disconnect()
-  }
+  window.removeEventListener('scrollend', stopNavigating)
+  clearTimeout(navigationTimer)
+  observer?.disconnect()
 })
-
-const setupIntersectionObserver = () => {
-  observer = new IntersectionObserver(
-    (entries) => {
-      if (!activeId.value) {
-        return false
-      }
-
-      let mostVisibleEntry = null
-      let highestRatio = 0
-
-      entries.forEach((entry) => {
-        if (entry.isIntersecting && entry.intersectionRatio > highestRatio) {
-          highestRatio = entry.intersectionRatio
-          mostVisibleEntry = entry
-        }
-      })
-
-      if (mostVisibleEntry?.target?.id) {
-        activeId.value = mostVisibleEntry?.target?.id
-      }
-
-      const lastSection = sections[sections.length - 1]
-      const rect = lastSection.getBoundingClientRect()
-      if (rect.bottom <= window.innerHeight && rect.top >= 0) {
-        activeId.value = lastSection?.id
-      }
-    },
-    {
-      threshold: [0.15, 0.3, 0.45, 0.6, 0.75, 0.85, 1.0],
-      root: null,
-    },
-  )
-
-  sections.forEach((section) => {
-    if (section.id) {
-      observer.observe(section)
-    }
-  })
-}
-
-const onScrollToSection = (menuItemId) => {
-  if (!menuItemId) {
-    return false
-  }
-
-  if (observer) {
-    observer.disconnect()
-  }
-
-  activeId.value = menuItemId
-  scrollWindowToSelector(`#${menuItemId}`, headerRef?.value.offsetHeight)
-  setTimeout(() => {
-    setupIntersectionObserver()
-  }, 1000)
-}
 </script>
 
 <style lang="scss">
@@ -162,8 +137,6 @@ const onScrollToSection = (menuItemId) => {
 $headerGlassOpacity: 70%;
 $headerGlassBlur: 12px;
 $headerBorderOpacity: 60%;
-$headerPaddingBlock: 0.375rem;
-$logoHeight: 2.25rem;
 $navLinkGap: 0.25rem;
 $navLinkPaddingBlock: 0.4rem;
 $navLinkPaddingInline: 0.85rem;
@@ -174,7 +147,7 @@ $headerMinSidePadding: 1rem;
 .TheHeader {
   width: 100%;
   padding: $headerPaddingBlock max(#{$headerMinSidePadding}, calc((100% - #{$contentMaxWidth}) / 2));
-  border-bottom: 1px solid transparent;
+  border-bottom: $headerBorderWidth solid transparent;
   background: transparent;
   position: sticky;
   top: 0;
@@ -194,7 +167,7 @@ $headerMinSidePadding: 1rem;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    height: $logoHeight;
+    height: $headerLogoHeight;
     padding: 0 0.6rem;
     border-radius: 0.6rem;
     background: var(--accent);
@@ -280,7 +253,7 @@ $headerMinSidePadding: 1rem;
   }
 
   @include between(1025, 1200) {
-    padding: 1rem 3rem;
+    padding: $headerPaddingBlockMidDesktop 3rem;
   }
 }
 </style>

@@ -40,6 +40,18 @@ ul {
   }
 }
 
+main > section {
+  scroll-margin-top: calc(
+    #{$headerLogoHeight} + 2 * #{$headerPaddingBlock} + #{$headerBorderWidth}
+  );
+
+  @include between(1025, 1200) {
+    scroll-margin-top: calc(
+      #{$headerLogoHeight} + 2 * #{$headerPaddingBlockMidDesktop} + #{$headerBorderWidth}
+    );
+  }
+}
+
 main {
   position: relative;
   z-index: 1;

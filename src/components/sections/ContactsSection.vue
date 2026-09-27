@@ -14,94 +14,17 @@
 
         <div class="buttons-wrap">
           <BaseButton
-            id="email-contact"
-            :is-link="true"
-            type="rounded-outline"
+            v-for="contact of contacts"
+            :id="`${contact.key}-contact`"
+            :key="contact.key"
+            :href="contact.href"
+            v-bind="contact.isExternal ? EXTERNAL_LINK_ATTRS : {}"
+            tag="a"
+            variant="rounded-outline"
             class="with-icon"
-            tag="div"
           >
-            <a :href="`mailto:${SOCIAL_LINKS.EMAIL}`">
-              <FontAwesomeIcon icon="fa-solid fa-envelope" />
-              {{ SOCIAL_LINKS.EMAIL }}
-            </a>
-          </BaseButton>
-
-          <BaseButton
-            id="LinkedIn-contact"
-            :is-link="true"
-            type="rounded-outline"
-            class="with-icon"
-            tag="div"
-          >
-            <a :href="SOCIAL_LINKS.LINKED_IN" target="_blank" rel="noopener noreferrer">
-              <FontAwesomeIcon icon="fa-brands fa-linkedin" />
-              LinkedIn
-            </a>
-          </BaseButton>
-
-          <BaseButton
-            id="telegram-contact"
-            :is-link="true"
-            type="rounded-outline"
-            class="with-icon"
-            tag="div"
-          >
-            <a :href="SOCIAL_LINKS.TG" target="_blank" rel="noopener noreferrer">
-              <FontAwesomeIcon icon="fa-brands fa-telegram" />
-              Telegram
-            </a>
-          </BaseButton>
-
-          <BaseButton
-            id="instagram-contact"
-            :is-link="true"
-            type="rounded-outline"
-            class="with-icon"
-            tag="div"
-          >
-            <a :href="SOCIAL_LINKS.INSTAGRAM" target="_blank" rel="noopener noreferrer">
-              <FontAwesomeIcon icon="fa-brands fa-instagram" />
-              Instagram
-            </a>
-          </BaseButton>
-
-          <BaseButton
-            id="whatsapp-contact"
-            :is-link="true"
-            type="rounded-outline"
-            class="with-icon"
-            tag="div"
-          >
-            <a :href="SOCIAL_LINKS.WHATSAPP" target="_blank" rel="noopener noreferrer">
-              <FontAwesomeIcon icon="fa-brands fa-whatsapp" />
-              WhatsApp
-            </a>
-          </BaseButton>
-
-          <BaseButton
-            id="viber-contact"
-            :is-link="true"
-            type="rounded-outline"
-            class="with-icon"
-            tag="div"
-          >
-            <a :href="SOCIAL_LINKS.VIBER">
-              <FontAwesomeIcon icon="fa-brands fa-viber" />
-              Viber
-            </a>
-          </BaseButton>
-
-          <BaseButton
-            id="github-contact"
-            :is-link="true"
-            type="rounded-outline"
-            class="with-icon"
-            tag="div"
-          >
-            <a :href="SOCIAL_LINKS.GITHUB_RESUME" target="_blank" rel="noopener noreferrer">
-              <FontAwesomeIcon icon="fa-brands fa-github" />
-              GitHub
-            </a>
+            <FontAwesomeIcon :icon="contact.icon" />
+            {{ contact.label || contact.name }}
           </BaseButton>
         </div>
       </div>
@@ -110,15 +33,15 @@
 </template>
 
 <script setup>
-import { defineAsyncComponent } from 'vue'
-
-const BaseButton = defineAsyncComponent(() => import('@/components/app/BaseButton.vue'))
-
 import { useI18n } from 'vue-i18n'
-import { SOCIAL_LINKS } from '@/constants.js'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { EXTERNAL_LINK_ATTRS, SOCIAL_CONTACTS } from '@/constants.js'
+import BaseButton from '@/components/app/BaseButton.vue'
+
+const CONTACT_KEYS = ['email', 'linkedIn', 'telegram', 'instagram', 'whatsApp', 'viber', 'github']
 
 const { t } = useI18n()
+
+const contacts = CONTACT_KEYS.map((key) => ({ key, ...SOCIAL_CONTACTS[key] }))
 </script>
 
 <style scoped lang="scss">
@@ -188,7 +111,7 @@ const { t } = useI18n()
     }
 
     .buttons-wrap {
-      button {
+      .BaseButton {
         width: 100%;
         font-size: 1rem !important;
       }

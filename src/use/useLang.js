@@ -4,17 +4,26 @@ import { STORAGE_KEYS } from '@/constants.js'
 
 export default function useLanguage() {
   const { locale, availableLocales } = useI18n()
-  ///
+
+  const setLocale = (nextLocale) => {
+    locale.value = nextLocale
+    document.documentElement.lang = nextLocale
+  }
+
   onMounted(() => {
-    locale.value = localStorage.getItem(STORAGE_KEYS['current-locale']) || locale?.value
-    document.documentElement.lang = locale.value
+    const savedLocale = localStorage.getItem(STORAGE_KEYS.LOCALE)
+
+    if (availableLocales.includes(savedLocale)) {
+      setLocale(savedLocale)
+    }
   })
-  ///
+
   const onChangeLocale = () => {
-    locale.value =
+    const nextLocale =
       availableLocales.find((iterLocale) => iterLocale !== locale.value) || locale.value
-    localStorage.setItem(STORAGE_KEYS['current-locale'], locale.value)
-    document.documentElement.lang = locale.value
+
+    setLocale(nextLocale)
+    localStorage.setItem(STORAGE_KEYS.LOCALE, nextLocale)
   }
 
   return { appLocale: locale, onChangeLocale }

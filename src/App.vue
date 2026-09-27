@@ -35,35 +35,15 @@
 </template>
 
 <script setup>
-//imports
-import { defineAsyncComponent } from 'vue'
 import { SECTIONS_NAMES } from '@/constants.js'
-
-//components
 import TheBg from '@/components/the/TheBg.vue'
 import TheHeader from '@/components/the/TheHeader.vue'
-
-const TheSettingsPanel = defineAsyncComponent(() => import('@/components/the/TheSettingsPanel.vue'))
-const AboutMeSection = defineAsyncComponent(
-  () => import('@/components/sections/AboutMeSection.vue'),
-)
-const ExperienceSection = defineAsyncComponent(
-  () => import('@/components/sections/ExperienceSection.vue'),
-)
-
-const ProjectsSection = defineAsyncComponent(
-  () => import('@/components/sections/ProjectsSection.vue'),
-)
-
-const SkillsSection = defineAsyncComponent(() => import('@/components/sections/SkillsSection.vue'))
-
-const ArticlesSection = defineAsyncComponent(
-  () => import('@/components/sections/ArticlesSection.vue'),
-)
-
-const ContactsSection = defineAsyncComponent(
-  () => import('@/components/sections/ContactsSection.vue'),
-)
-
-const TheFooter = defineAsyncComponent(() => import('@/components/the/TheFooter.vue'))
+import TheSettingsPanel from '@/components/the/TheSettingsPanel.vue'
+import TheFooter from '@/components/the/TheFooter.vue'
+import AboutMeSection from '@/components/sections/AboutMeSection.vue'
+import ExperienceSection from '@/components/sections/ExperienceSection.vue'
+import ProjectsSection from '@/components/sections/ProjectsSection.vue'
+import SkillsSection from '@/components/sections/SkillsSection.vue'
+import ArticlesSection from '@/components/sections/ArticlesSection.vue'
+import ContactsSection from '@/components/sections/ContactsSection.vue'
 </script>

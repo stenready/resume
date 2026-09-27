@@ -82,7 +82,7 @@ $groupTitleWidth: 13rem;
   }
 
   .label-item {
-    background-color: rgba(30, 144, 255, 0.15);
+    background-color: var(--label-bg);
     color: var(--accent2);
     padding: 4px 12px;
     border-radius: 1rem;

@@ -2,22 +2,20 @@
   <div data-component-name="TheSettingsPanel" class="TheSettingsPanel">
     <BaseButton
       id="theme-btn"
-      :aria-label="getCurrentTheme?.isDark ? 'Light theme' : 'Dark theme'"
+      :aria-label="getCurrentTheme.isDark ? t('lightTheme') : t('darkTheme')"
       @click="onChangeTheme"
       size="small"
-      type="main"
     >
       <template #icon>
-        {{ getCurrentTheme?.themeIcon }}
+        {{ getCurrentTheme.themeIcon }}
       </template>
     </BaseButton>
 
     <BaseButton
       id="lang-btn"
-      :aria-label="`Language: ${appLocale}`"
+      :aria-label="t('languageSwitch', { locale: appLocale })"
       @click="onChangeLocale"
       size="small"
-      type="main"
     >
       <div class="to-uppercase font-500">
         {{ appLocale }}
@@ -27,15 +25,12 @@
 </template>
 
 <script setup>
-//imports
-import { defineAsyncComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
 import useTheme from '@/use/useTheme.js'
 import useLanguage from '@/use/useLang.js'
+import BaseButton from '@/components/app/BaseButton.vue'
 
-//components
-const BaseButton = defineAsyncComponent(() => import('@/components/app/BaseButton.vue'))
-
-/// hooks custom
+const { t } = useI18n()
 const { onChangeTheme, getCurrentTheme } = useTheme()
 const { appLocale, onChangeLocale } = useLanguage()
 </script>
