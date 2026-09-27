@@ -34,8 +34,8 @@
   </div>
 </template>
 
-<script setup>
-import { SECTIONS_NAMES } from '@/constants.js'
+<script setup lang="ts">
+import { SECTIONS_NAMES } from '@/constants'
 import TheBg from '@/components/the/TheBg.vue'
 import TheHeader from '@/components/the/TheHeader.vue'
 import TheSettingsPanel from '@/components/the/TheSettingsPanel.vue'

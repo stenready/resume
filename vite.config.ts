@@ -1,13 +1,13 @@
 import { fileURLToPath, URL } from 'node:url'
 
-import { defineConfig } from 'vite'
+import { defineConfig, type Plugin } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import svgLoader from 'vite-svg-loader'
 
 const GOATCOUNTER_ENDPOINT = 'https://sten-ready.goatcounter.com/count'
 
-const goatCounter = () => ({
+const goatCounter = (): Plugin => ({
   name: 'goatcounter',
   apply: 'build',
   transformIndexHtml: () => [

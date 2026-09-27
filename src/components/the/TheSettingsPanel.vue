@@ -24,10 +24,10 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import useTheme from '@/use/useTheme.js'
-import useLanguage from '@/use/useLang.js'
+import useTheme from '@/use/useTheme'
+import useLanguage from '@/use/useLang'
 import BaseButton from '@/components/app/BaseButton.vue'
 
 const { t } = useI18n()

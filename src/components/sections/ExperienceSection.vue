@@ -64,26 +64,38 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { reactive } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { PLANETA_KINO_URL } from '@/constants.js'
+import { PLANETA_KINO_URL } from '@/constants'
 
 const { t, tm, rt, locale } = useI18n()
 
 const MONTHS_IN_YEAR = 12
 const VISIBLE_BULLETS_LIMIT = 6
 
-const expandedJobs = reactive({})
+interface Job {
+  id: string
+  company: string
+  link?: string
+  start: string
+  end: string | null
+  stack: string[]
+}
 
-const getBullets = (jobId) => tm(`experience.${jobId}.bullets`)
+const expandedJobs = reactive<Record<string, boolean>>({})
 
-const getVisibleBullets = (jobId) => {
+const getBullets = (jobId: string): string[] => {
+  const key: string = `experience.${jobId}.bullets`
+  return tm(key)
+}
+
+const getVisibleBullets = (jobId: string) => {
   const bullets = getBullets(jobId)
   return expandedJobs[jobId] ? bullets : bullets.slice(0, VISIBLE_BULLETS_LIMIT)
 }
 
-const JOBS = [
+const JOBS: Job[] = [
   {
     id: 'planetaKino',
     company: 'Planeta Kino',
@@ -159,7 +171,7 @@ const JOBS = [
   },
 ]
 
-const toMonthIndex = (yearMonth) => {
+const toMonthIndex = (yearMonth: string) => {
   const [year, month] = yearMonth.split('-').map(Number)
   return year * MONTHS_IN_YEAR + month
 }
@@ -169,15 +181,15 @@ const getCurrentYearMonth = () => {
   return `${now.getFullYear()}-${now.getMonth() + 1}`
 }
 
-const getMonthsWorked = ({ start, end }) =>
+const getMonthsWorked = ({ start, end }: Job) =>
   toMonthIndex(end || getCurrentYearMonth()) - toMonthIndex(start) + 1
 
-const pluralize = (key, n) => {
+const pluralize = (key: string, n: number) => {
   const form = new Intl.PluralRules(locale.value).select(n)
   return t(`${key}.${form}`, { n })
 }
 
-const formatDuration = (job) => {
+const formatDuration = (job: Job) => {
   const totalMonths = getMonthsWorked(job)
   const years = Math.floor(totalMonths / MONTHS_IN_YEAR)
   const months = totalMonths % MONTHS_IN_YEAR

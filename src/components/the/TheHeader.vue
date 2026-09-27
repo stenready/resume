@@ -32,23 +32,23 @@
   </header>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { SECTIONS_NAMES } from '@/constants.js'
+import { SECTIONS_NAMES } from '@/constants'
 
 const SCROLLED_THRESHOLD = 8
 const NAVIGATION_FALLBACK_MS = 1000
 const VISIBILITY_THRESHOLDS = [0.15, 0.3, 0.45, 0.6, 0.75, 0.85, 1.0]
 
-const activeId = ref(SECTIONS_NAMES.ABOUT_ME)
-const navRef = ref(null)
+const activeId = ref<string>(SECTIONS_NAMES.ABOUT_ME)
+const navRef = ref<HTMLElement | null>(null)
 const isScrolled = ref(false)
 
-let sections = []
-let observer = null
+let sections: HTMLElement[] = []
+let observer: IntersectionObserver | null = null
 let isNavigating = false
-let navigationTimer = null
+let navigationTimer: ReturnType<typeof setTimeout> | undefined
 
 const { t } = useI18n()
 
@@ -66,34 +66,43 @@ const onScroll = () => {
 }
 
 watch(activeId, (id) => {
-  const link = navRef.value?.querySelector(`#${id}-link`)
-  navRef.value?.scrollTo({
-    left: link ? link.offsetLeft - (navRef.value.clientWidth - link.offsetWidth) / 2 : 0,
+  const nav = navRef.value
+  if (!nav) {
+    return
+  }
+
+  const link = nav.querySelector<HTMLElement>(`#${id}-link`)
+  nav.scrollTo({
+    left: link ? link.offsetLeft - (nav.clientWidth - link.offsetWidth) / 2 : 0,
     behavior: 'smooth',
   })
 })
 
-const onIntersect = (entries) => {
+const onIntersect = (entries: IntersectionObserverEntry[]) => {
   // while a menu click scrolls the page, sections flying by must not steal the highlight
   if (isNavigating) {
     return
   }
 
-  let mostVisibleEntry = null
+  let mostVisibleEntry: IntersectionObserverEntry | null = null
   let highestRatio = 0
 
-  entries.forEach((entry) => {
+  for (const entry of entries) {
     if (entry.isIntersecting && entry.intersectionRatio > highestRatio) {
       highestRatio = entry.intersectionRatio
       mostVisibleEntry = entry
     }
-  })
+  }
 
   if (mostVisibleEntry) {
     activeId.value = mostVisibleEntry.target.id
   }
 
   const lastSection = sections.at(-1)
+  if (!lastSection) {
+    return
+  }
+
   const rect = lastSection.getBoundingClientRect()
   if (rect.bottom <= window.innerHeight && rect.top >= 0) {
     activeId.value = lastSection.id
@@ -105,7 +114,7 @@ const stopNavigating = () => {
   clearTimeout(navigationTimer)
 }
 
-const onNavigate = (sectionId) => {
+const onNavigate = (sectionId: string) => {
   activeId.value = sectionId
   isNavigating = true
   clearTimeout(navigationTimer)
@@ -117,9 +126,12 @@ onMounted(() => {
   onScroll()
   window.addEventListener('scroll', onScroll, { passive: true })
 
-  sections = Array.from(document.querySelectorAll('main > section'))
-  observer = new IntersectionObserver(onIntersect, { threshold: VISIBILITY_THRESHOLDS })
-  sections.forEach((section) => observer.observe(section))
+  sections = Array.from(document.querySelectorAll<HTMLElement>('main > section'))
+  const sectionObserver = new IntersectionObserver(onIntersect, {
+    threshold: VISIBILITY_THRESHOLDS,
+  })
+  sections.forEach((section) => sectionObserver.observe(section))
+  observer = sectionObserver
 })
 
 onBeforeUnmount(() => {

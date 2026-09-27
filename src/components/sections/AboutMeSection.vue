@@ -127,7 +127,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
 import {
@@ -135,12 +135,13 @@ import {
   PLANETA_KINO_URL,
   SECTIONS_NAMES,
   SOCIAL_CONTACTS,
-} from '@/constants.js'
+  type SocialContactKey,
+} from '@/constants'
 import BaseButton from '@/components/app/BaseButton.vue'
 
 const { t, locale } = useI18n()
 
-const RESUME_FILES = {
+const RESUME_FILES: Record<string, string> = {
   en: 'Stanislav_Radchenko_Senior_Frontend_Developer_EN.pdf',
   uk: 'Stanislav_Radchenko_Senior_Frontend_Developer_UA.pdf',
 }
@@ -197,7 +198,14 @@ const LANGUAGE_KEYS = [
 
 const GROWTH_KEYS = ['growthEnglish', 'growthNode', 'growthReact']
 
-const HERO_SOCIAL_KEYS = ['linkedIn', 'telegram', 'instagram', 'whatsApp', 'viber', 'email']
+const HERO_SOCIAL_KEYS: SocialContactKey[] = [
+  'linkedIn',
+  'telegram',
+  'instagram',
+  'whatsApp',
+  'viber',
+  'email',
+]
 
 const heroSocials = HERO_SOCIAL_KEYS.map((key) => ({ key, ...SOCIAL_CONTACTS[key] }))
 </script>

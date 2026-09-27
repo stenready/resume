@@ -8,7 +8,7 @@
   <BgSkills />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import BgSkills from '@/components/the/BgSkills.vue'
 </script>
 

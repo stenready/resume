@@ -15,38 +15,22 @@
   </component>
 </template>
 
-<script>
-const TAGS = ['button', 'a']
-const SIZES = ['small', '']
-const VARIANTS = ['main', 'social', 'rounded-outline']
-</script>
-
-<script setup>
-defineProps({
-  id: {
-    type: String,
-    required: true,
+<script setup lang="ts">
+withDefaults(
+  defineProps<{
+    id: string
+    ariaLabel?: string
+    tag?: 'button' | 'a'
+    size?: 'small' | ''
+    variant?: 'main' | 'social' | 'rounded-outline'
+  }>(),
+  {
+    ariaLabel: '',
+    tag: 'button',
+    size: '',
+    variant: 'main',
   },
-  ariaLabel: {
-    type: String,
-    default: '',
-  },
-  tag: {
-    type: String,
-    default: 'button',
-    validator: (value) => TAGS.includes(value),
-  },
-  size: {
-    type: String,
-    default: '',
-    validator: (value) => SIZES.includes(value),
-  },
-  variant: {
-    type: String,
-    default: 'main',
-    validator: (value) => VARIANTS.includes(value),
-  },
-})
+)
 </script>
 
 <style lang="scss">

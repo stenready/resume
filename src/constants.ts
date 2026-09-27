@@ -1,12 +1,14 @@
 export const STORAGE_KEYS = {
   LOCALE: 'current-locale',
   THEME: 'current-theme',
-}
+} as const
 
 export const THEMES = {
   dark: 'dark',
   light: 'light',
-}
+} as const
+
+export type Theme = (typeof THEMES)[keyof typeof THEMES]
 
 export const SECTIONS_NAMES = {
   ABOUT_ME: 'about',
@@ -15,16 +17,35 @@ export const SECTIONS_NAMES = {
   SKILLS: 'skills',
   ARTICLES: 'articles',
   CONTACTS: 'contacts',
-}
+} as const
+
+export type SectionName = (typeof SECTIONS_NAMES)[keyof typeof SECTIONS_NAMES]
 
 const EMAIL = 's.radchenko.develop@gmail.com'
 
 export const EXTERNAL_LINK_ATTRS = {
   target: '_blank',
   rel: 'noopener noreferrer',
+} as const
+
+export interface SocialContact {
+  name: string
+  label?: string
+  icon: string
+  href: string
+  isExternal?: boolean
 }
 
-export const SOCIAL_CONTACTS = {
+export type SocialContactKey =
+  | 'email'
+  | 'linkedIn'
+  | 'telegram'
+  | 'instagram'
+  | 'whatsApp'
+  | 'viber'
+  | 'github'
+
+export const SOCIAL_CONTACTS: Record<SocialContactKey, SocialContact> = {
   email: {
     name: 'Email',
     label: EMAIL,

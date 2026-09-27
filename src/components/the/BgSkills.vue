@@ -7,10 +7,10 @@
   ></canvas>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import useTheme from '@/use/useTheme.js'
-import { BACKGROUND_SKILL_GROUPS } from '@/use/useBg.js'
+import useTheme from '@/use/useTheme'
+import { BACKGROUND_SKILL_GROUPS, type BackgroundSkill } from '@/use/useBg'
 
 const ICON_VIEWBOX = 24
 const ICON_SIZE_MIN = 26
@@ -82,52 +82,97 @@ const STATE = {
   FLYING: 'flying',
   DOCKED: 'docked',
   LEAVING: 'leaving',
+} as const
+
+type ParticleState = (typeof STATE)[keyof typeof STATE]
+type Side = 'left' | 'right'
+
+interface Point {
+  x: number
+  y: number
 }
 
-const canvasRef = ref(null)
+interface Flight {
+  from: Point
+  control: Point
+  startTime: number
+}
+
+interface Particle extends Point {
+  label: string
+  path: Path2D | null
+  size: number
+  riseSpeed: number
+  state: ParticleState
+  stateUntil: number
+  anchorX: number
+  swayPhase: number
+  alpha: number
+  scale: number
+  rowness: number
+  isLeft: boolean
+  columnY: number
+  slot: Point
+  rowWidth: number
+  rowLines: string[]
+  scatterPoint: Point
+  departAt: number
+  appearedAt: number | null
+  flight: Flight | null
+  trail: Point[]
+  pushX: number
+  pushY: number
+}
+
+const canvasRef = ref<HTMLCanvasElement | null>(null)
 const { getCurrentTheme } = useTheme()
 
-let ctx = null
-let particles = []
-let rafId = null
-let lastFrameTime = null
+let ctx: CanvasRenderingContext2D | null = null
+let particles: Particle[] = []
+let rafId: number | null = null
+let lastFrameTime: number | null = null
 let width = 0
 let height = 0
-let reducedMotionQuery = null
+let reducedMotionQuery: MediaQueryList | null = null
 let columnsMode = false
-const pointer = { x: -Infinity, y: -Infinity }
+const pointer: Point = { x: -Infinity, y: -Infinity }
 
-const randomBetween = (min, max) => min + Math.random() * (max - min)
-const clamp01 = (value) => Math.min(1, Math.max(0, value))
+const randomBetween = (min: number, max: number) => min + Math.random() * (max - min)
+const clamp01 = (value: number) => Math.min(1, Math.max(0, value))
 
-const easeOutCubic = (t) => 1 - (1 - t) ** 3
-const easeInOutCubic = (t) => (t < 0.5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2)
+const easeOutCubic = (t: number) => 1 - (1 - t) ** 3
+const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2)
 
-const quadraticBezier = (from, control, to, t) => ({
+const quadraticBezier = (from: Point, control: Point, to: Point, t: number): Point => ({
   x: (1 - t) ** 2 * from.x + 2 * (1 - t) * t * control.x + t ** 2 * to.x,
   y: (1 - t) ** 2 * from.y + 2 * (1 - t) * t * control.y + t ** 2 * to.y,
 })
 
 const getGutterWidth = () => (width - CONTENT_MAX_WIDTH) / 2
 
-const hasRoomForColumns = (columnsHeight) => {
+const hasRoomForColumns = (columnsHeight: number) => {
   const neededHeight = COLUMNS_TOP + columnsHeight + COLUMNS_BOTTOM_MARGIN
   return getGutterWidth() >= MIN_COLUMN_WIDTH + COLUMN_GAP && height >= neededHeight
 }
 
-const getRowIconWidth = (skill) => (skill.path ? ROW_ICON_SIZE + ROW_ICON_GAP : 0)
+const getRowIconWidth = (skill: { path?: unknown }) =>
+  skill.path ? ROW_ICON_SIZE + ROW_ICON_GAP : 0
 
-const measureText = (text) => {
+const measureText = (text: string) => {
+  if (!ctx) {
+    return 0
+  }
+
   ctx.font = `700 ${ROW_FONT_SIZE}px Inter, system-ui, sans-serif`
   return ctx.measureText(text).width
 }
 
 const getColumnAvailableWidth = () => getGutterWidth() - COLUMN_GAP - COLUMN_EDGE_MARGIN
 
-const splitRowLines = (skill) => {
+const splitRowLines = (skill: BackgroundSkill) => {
   const maxTextWidth = getColumnAvailableWidth() - getRowIconWidth(skill)
 
-  return skill.label.split(' ').reduce((lines, word) => {
+  return skill.label.split(' ').reduce<string[]>((lines, word) => {
     const lastLine = lines[lines.length - 1]
     const joined = `${lastLine} ${word}`
 
@@ -141,10 +186,10 @@ const splitRowLines = (skill) => {
   }, [])
 }
 
-const measureRowWidth = (particle) =>
+const measureRowWidth = (particle: Particle) =>
   getRowIconWidth(particle) + Math.max(...particle.rowLines.map(measureText))
 
-const assignSlot = (particle) => {
+const assignSlot = (particle: Particle) => {
   const gutterWidth = getGutterWidth()
   const edgeX = particle.isLeft ? gutterWidth - COLUMN_GAP : width - gutterWidth + COLUMN_GAP
 
@@ -159,6 +204,10 @@ const assignSlot = (particle) => {
 
 const resizeCanvas = () => {
   const canvas = canvasRef.value
+  if (!canvas || !ctx) {
+    return
+  }
+
   const pixelRatio = window.devicePixelRatio || 1
 
   width = window.innerWidth
@@ -168,7 +217,7 @@ const resizeCanvas = () => {
   ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0)
 }
 
-const createParticle = (skill, isLeft, columnY) => ({
+const createParticle = (skill: BackgroundSkill, isLeft: boolean, columnY: number): Particle => ({
   label: skill.label,
   path: skill.path ? new Path2D(skill.path) : null,
   size: skill.path ? randomBetween(ICON_SIZE_MIN, ICON_SIZE_MAX) : 0,
@@ -184,10 +233,10 @@ const createParticle = (skill, isLeft, columnY) => ({
   rowness: 0,
   isLeft,
   columnY,
-  slot: null,
+  slot: { x: 0, y: 0 },
   rowWidth: 0,
   rowLines: [skill.label],
-  scatterPoint: null,
+  scatterPoint: { x: 0, y: 0 },
   departAt: 0,
   appearedAt: null,
   flight: null,
@@ -198,7 +247,7 @@ const createParticle = (skill, isLeft, columnY) => ({
 
 const createParticles = () => {
   const isNarrow = width < MOBILE_BREAKPOINT
-  const columnHeights = { left: 0, right: 0 }
+  const columnHeights: Record<Side, number> = { left: 0, right: 0 }
 
   const allParticles = BACKGROUND_SKILL_GROUPS.flatMap((group) => {
     if (columnHeights[group.side] > 0) {
@@ -217,16 +266,16 @@ const createParticles = () => {
   columnsMode = !isNarrow && hasRoomForColumns(Math.max(columnHeights.left, columnHeights.right))
 }
 
-const randomScatterPoint = () => ({
+const randomScatterPoint = (): Point => ({
   x: randomBetween(SCATTER_MARGIN, width - SCATTER_MARGIN),
   y: randomBetween(SCATTER_TOP, height - SCATTER_MARGIN),
 })
 
-const distanceToNearest = (point, points) =>
+const distanceToNearest = (point: Point, points: Point[]) =>
   Math.min(Infinity, ...points.map((other) => Math.hypot(other.x - point.x, other.y - point.y)))
 
-const spreadPoints = (count, taken = []) => {
-  const points = []
+const spreadPoints = (count: number, taken: Point[] = []) => {
+  const points: Point[] = []
 
   for (let idx = 0; idx < count; idx++) {
     const occupied = [...taken, ...points]
@@ -243,8 +292,8 @@ const spreadPoints = (count, taken = []) => {
 
 const pairScatterPoints = () => {
   const points = spreadPoints(particles.length).sort((a, b) => a.x - b.x)
-  const byColumnY = (a, b) => a.columnY - b.columnY
-  const byY = (a, b) => a.y - b.y
+  const byColumnY = (a: Particle, b: Particle) => a.columnY - b.columnY
+  const byY = (a: Point, b: Point) => a.y - b.y
   const leftParticles = particles.filter(({ isLeft }) => isLeft).sort(byColumnY)
   const rightParticles = particles.filter(({ isLeft }) => !isLeft).sort(byColumnY)
   const leftPoints = points.slice(0, leftParticles.length).sort(byY)
@@ -254,7 +303,7 @@ const pairScatterPoints = () => {
   rightParticles.forEach((particle, idx) => (particle.scatterPoint = rightPoints[idx]))
 }
 
-const startIntro = (now) => {
+const startIntro = (now: number) => {
   pairScatterPoints()
 
   const gatherStart = INTRO_DELAY + APPEAR_WINDOW + APPEAR_DURATION + SCATTER_PAUSE
@@ -268,13 +317,13 @@ const startIntro = (now) => {
   })
 }
 
-const scheduleSpawn = (particle, now, maxDelay) => {
+const scheduleSpawn = (particle: Particle, now: number, maxDelay: number) => {
   particle.state = STATE.WAITING
   particle.stateUntil = now + randomBetween(0, maxDelay)
   particle.alpha = 0
 }
 
-const startFloating = (now) => {
+const startFloating = (now: number) => {
   particles.forEach((particle) => scheduleSpawn(particle, now, SPAWN_WINDOW))
 }
 
@@ -290,7 +339,7 @@ const placeInColumns = () => {
   })
 }
 
-const appear = (particle, now) => {
+const appear = (particle: Particle, now: number) => {
   const point = columnsMode
     ? particle.scatterPoint
     : spreadPoints(
@@ -308,7 +357,7 @@ const appear = (particle, now) => {
     : now + randomBetween(FLOAT_LIFETIME_MIN, FLOAT_LIFETIME_MAX)
 }
 
-const getCurveControl = (from, to, isLeft) => {
+const getCurveControl = (from: Point, to: Point, isLeft: boolean): Point => {
   const dx = to.x - from.x
   const dy = to.y - from.y
   const length = Math.hypot(dx, dy) || 1
@@ -320,7 +369,7 @@ const getCurveControl = (from, to, isLeft) => {
   }
 }
 
-const takeOff = (particle, now) => {
+const takeOff = (particle: Particle, now: number) => {
   const from = { x: particle.x, y: particle.y }
 
   particle.flight = {
@@ -332,18 +381,22 @@ const takeOff = (particle, now) => {
   particle.state = STATE.FLYING
 }
 
-const float = (particle, seconds) => {
+const float = (particle: Particle, seconds: number) => {
   particle.swayPhase += SWAY_SPEED * seconds
   particle.x = particle.anchorX + Math.sin(particle.swayPhase) * SWAY_AMPLITUDE
   particle.y -= particle.riseSpeed * seconds
 }
 
-const getAppearProgress = (particle, now) =>
+const getAppearProgress = (particle: Particle, now: number) =>
   particle.appearedAt === null ? 1 : clamp01((now - particle.appearedAt) / APPEAR_DURATION)
 
-const fly = (particle, now) => {
-  const t = clamp01((now - particle.flight.startTime) / FLIGHT_DURATION)
-  const { from, control } = particle.flight
+const fly = (particle: Particle, now: number) => {
+  if (!particle.flight) {
+    return
+  }
+
+  const { from, control, startTime } = particle.flight
+  const t = clamp01((now - startTime) / FLIGHT_DURATION)
   const point = quadraticBezier(from, control, particle.slot, easeInOutCubic(t))
 
   particle.trail.push({ x: particle.x, y: particle.y })
@@ -364,7 +417,7 @@ const fly = (particle, now) => {
   }
 }
 
-const applyPointer = (particle) => {
+const applyPointer = (particle: Particle) => {
   const dx = particle.x + particle.pushX - pointer.x
   const dy = particle.y + particle.pushY - pointer.y
   const distance = Math.hypot(dx, dy)
@@ -379,7 +432,7 @@ const applyPointer = (particle) => {
   particle.pushY *= DAMPING
 }
 
-const updateParticle = (particle, now, seconds) => {
+const updateParticle = (particle: Particle, now: number, seconds: number) => {
   switch (particle.state) {
     case STATE.WAITING:
       if (now >= particle.stateUntil) {
@@ -420,69 +473,79 @@ const updateParticle = (particle, now, seconds) => {
   applyPointer(particle)
 }
 
-const drawFloating = (particle, x, y) => {
+const drawFloating = (
+  context: CanvasRenderingContext2D,
+  particle: Particle,
+  x: number,
+  y: number,
+) => {
   if (!particle.path) {
-    ctx.font = `700 ${TEXT_FONT_SIZE}px Inter, system-ui, sans-serif`
-    ctx.textAlign = 'center'
-    ctx.textBaseline = 'top'
-    ctx.fillText(particle.label, x, y)
+    context.font = `700 ${TEXT_FONT_SIZE}px Inter, system-ui, sans-serif`
+    context.textAlign = 'center'
+    context.textBaseline = 'top'
+    context.fillText(particle.label, x, y)
     return
   }
 
   const scale = particle.size / ICON_VIEWBOX
 
-  ctx.save()
-  ctx.translate(x - particle.size / 2, y)
-  ctx.scale(scale, scale)
-  ctx.fill(particle.path)
-  ctx.restore()
+  context.save()
+  context.translate(x - particle.size / 2, y)
+  context.scale(scale, scale)
+  context.fill(particle.path)
+  context.restore()
 
-  ctx.font = `600 ${LABEL_FONT_SIZE}px Inter, system-ui, sans-serif`
-  ctx.textAlign = 'center'
-  ctx.textBaseline = 'top'
-  ctx.fillText(particle.label, x, y + particle.size + LABEL_GAP)
+  context.font = `600 ${LABEL_FONT_SIZE}px Inter, system-ui, sans-serif`
+  context.textAlign = 'center'
+  context.textBaseline = 'top'
+  context.fillText(particle.label, x, y + particle.size + LABEL_GAP)
 }
 
-const drawRow = (particle, x, y) => {
+const drawRow = (context: CanvasRenderingContext2D, particle: Particle, x: number, y: number) => {
   const middleY = y + ROW_ICON_SIZE / 2
   const iconWidth = particle.path ? ROW_ICON_SIZE + ROW_ICON_GAP : 0
   const rowStartX = x - particle.rowWidth / 2
 
-  ctx.font = `700 ${ROW_FONT_SIZE}px Inter, system-ui, sans-serif`
-  ctx.textBaseline = 'middle'
+  context.font = `700 ${ROW_FONT_SIZE}px Inter, system-ui, sans-serif`
+  context.textBaseline = 'middle'
 
   if (particle.path) {
     const scale = ROW_ICON_SIZE / ICON_VIEWBOX
 
-    ctx.save()
-    ctx.translate(rowStartX, y)
-    ctx.scale(scale, scale)
-    ctx.fill(particle.path)
-    ctx.restore()
+    context.save()
+    context.translate(rowStartX, y)
+    context.scale(scale, scale)
+    context.fill(particle.path)
+    context.restore()
   }
 
-  ctx.textAlign = 'left'
+  context.textAlign = 'left'
   particle.rowLines.forEach((line, idx) => {
-    ctx.fillText(line, rowStartX + iconWidth, middleY + idx * ROW_LINE_HEIGHT)
+    context.fillText(line, rowStartX + iconWidth, middleY + idx * ROW_LINE_HEIGHT)
   })
 }
 
-const drawTrail = (particle) => {
+const drawTrail = (context: CanvasRenderingContext2D, particle: Particle) => {
   const points = [...particle.trail, { x: particle.x, y: particle.y }]
 
-  ctx.lineCap = 'round'
+  context.lineCap = 'round'
   for (let idx = 1; idx < points.length; idx++) {
     const share = idx / points.length
-    ctx.globalAlpha = TRAIL_OPACITY * share
-    ctx.lineWidth = TRAIL_WIDTH * share
-    ctx.beginPath()
-    ctx.moveTo(points[idx - 1].x, points[idx - 1].y)
-    ctx.lineTo(points[idx].x, points[idx].y)
-    ctx.stroke()
+    context.globalAlpha = TRAIL_OPACITY * share
+    context.lineWidth = TRAIL_WIDTH * share
+    context.beginPath()
+    context.moveTo(points[idx - 1].x, points[idx - 1].y)
+    context.lineTo(points[idx].x, points[idx].y)
+    context.stroke()
   }
 }
 
 const draw = () => {
+  const context = ctx
+  if (!context) {
+    return
+  }
+
   const isDark = getCurrentTheme.value.isDark
   const floatingOpacity = columnsMode
     ? isDark
@@ -493,9 +556,9 @@ const draw = () => {
       : FLOATING_OPACITY_LIGHT
   const dockedOpacity = isDark ? DOCKED_OPACITY_DARK : DOCKED_OPACITY_LIGHT
 
-  ctx.clearRect(0, 0, width, height)
-  ctx.fillStyle = `rgb(${ACCENT_RGB})`
-  ctx.strokeStyle = `rgb(${ACCENT_RGB})`
+  context.clearRect(0, 0, width, height)
+  context.fillStyle = `rgb(${ACCENT_RGB})`
+  context.strokeStyle = `rgb(${ACCENT_RGB})`
 
   particles.forEach((particle) => {
     if (particle.alpha <= 0) {
@@ -503,32 +566,32 @@ const draw = () => {
     }
 
     if (particle.trail.length) {
-      drawTrail(particle)
+      drawTrail(context, particle)
     }
 
-    ctx.save()
-    ctx.translate(particle.x + particle.pushX, particle.y + particle.pushY)
-    ctx.scale(particle.scale, particle.scale)
+    context.save()
+    context.translate(particle.x + particle.pushX, particle.y + particle.pushY)
+    context.scale(particle.scale, particle.scale)
 
     if (particle.rowness < 1) {
-      ctx.globalAlpha = particle.alpha * (1 - particle.rowness) * floatingOpacity
-      drawFloating(particle, 0, 0)
+      context.globalAlpha = particle.alpha * (1 - particle.rowness) * floatingOpacity
+      drawFloating(context, particle, 0, 0)
     }
 
     if (particle.rowness > 0) {
-      ctx.globalAlpha = particle.alpha * particle.rowness * dockedOpacity
-      drawRow(particle, 0, 0)
+      context.globalAlpha = particle.alpha * particle.rowness * dockedOpacity
+      drawRow(context, particle, 0, 0)
     }
 
-    ctx.restore()
+    context.restore()
   })
 
-  ctx.globalAlpha = 1
+  context.globalAlpha = 1
 }
 
 const hasAssembled = () => columnsMode && particles.every(({ state }) => state === STATE.DOCKED)
 
-const tick = (now) => {
+const tick = (now: number) => {
   const seconds = lastFrameTime === null ? 0 : (now - lastFrameTime) / 1000
   lastFrameTime = now
 
@@ -554,7 +617,7 @@ const showStill = () => {
 }
 
 const start = () => {
-  if (reducedMotionQuery.matches) {
+  if (reducedMotionQuery?.matches) {
     showStill()
     return
   }
@@ -613,7 +676,7 @@ const onResize = () => {
   }
 }
 
-const onPointerMove = (event) => {
+const onPointerMove = (event: PointerEvent) => {
   pointer.x = event.clientX
   pointer.y = event.clientY
 }
@@ -635,7 +698,11 @@ watch(
 )
 
 onMounted(() => {
-  ctx = canvasRef.value.getContext('2d')
+  ctx = canvasRef.value?.getContext('2d') ?? null
+  if (!ctx) {
+    return
+  }
+
   reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
 
   resizeCanvas()
@@ -654,7 +721,7 @@ onBeforeUnmount(() => {
   window.removeEventListener('pointermove', onPointerMove)
   document.documentElement.removeEventListener('pointerleave', onPointerLeave)
   document.removeEventListener('visibilitychange', onVisibilityChange)
-  reducedMotionQuery.removeEventListener('change', restart)
+  reducedMotionQuery?.removeEventListener('change', restart)
 })
 </script>
 

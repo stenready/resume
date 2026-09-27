@@ -1,11 +1,11 @@
 import { useI18n } from 'vue-i18n'
 import { onMounted } from 'vue'
-import { STORAGE_KEYS } from '@/constants.js'
+import { STORAGE_KEYS } from '@/constants'
 
 export default function useLanguage() {
   const { locale, availableLocales } = useI18n()
 
-  const setLocale = (nextLocale) => {
+  const setLocale = (nextLocale: string) => {
     locale.value = nextLocale
     document.documentElement.lang = nextLocale
   }
@@ -13,7 +13,7 @@ export default function useLanguage() {
   onMounted(() => {
     const savedLocale = localStorage.getItem(STORAGE_KEYS.LOCALE)
 
-    if (availableLocales.includes(savedLocale)) {
+    if (savedLocale && availableLocales.includes(savedLocale)) {
       setLocale(savedLocale)
     }
   })

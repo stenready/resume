@@ -14,7 +14,7 @@
         <p class="project-summary">{{ t(`projectItems.${project.id}.summary`) }}</p>
 
         <ul class="project-points">
-          <li v-for="(point, pointIdx) of tm(`projectItems.${project.id}.points`)" :key="pointIdx">
+          <li v-for="(point, pointIdx) of getPoints(project.id)" :key="pointIdx">
             {{ rt(point) }}
           </li>
         </ul>
@@ -32,10 +32,15 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 
 const { t, tm, rt } = useI18n()
+
+const getPoints = (projectId: string): string[] => {
+  const key: string = `projectItems.${projectId}.points`
+  return tm(key)
+}
 
 const PROJECTS = [
   {

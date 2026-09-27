@@ -1,5 +1,16 @@
 // icons: https://simpleicons.org
-export const BACKGROUND_SKILL_GROUPS = [
+export interface BackgroundSkill {
+  label: string
+  path?: string
+}
+
+export interface BackgroundSkillGroup {
+  id: string
+  side: 'left' | 'right'
+  skills: BackgroundSkill[]
+}
+
+export const BACKGROUND_SKILL_GROUPS: BackgroundSkillGroup[] = [
   {
     id: 'core',
     side: 'left',

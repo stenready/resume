@@ -40,7 +40,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import Article1 from '/public/images/article1.webp'
 import Article2 from '/public/images/article2.webp'
@@ -88,7 +88,7 @@ const ARTICLES = [
   },
 ]
 
-const formatDate = (isoDate) =>
+const formatDate = (isoDate: string) =>
   new Intl.DateTimeFormat(locale.value, {
     day: 'numeric',
     month: 'short',

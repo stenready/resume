@@ -32,12 +32,20 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import { EXTERNAL_LINK_ATTRS, SOCIAL_CONTACTS } from '@/constants.js'
+import { EXTERNAL_LINK_ATTRS, SOCIAL_CONTACTS, type SocialContactKey } from '@/constants'
 import BaseButton from '@/components/app/BaseButton.vue'
 
-const CONTACT_KEYS = ['email', 'linkedIn', 'telegram', 'instagram', 'whatsApp', 'viber', 'github']
+const CONTACT_KEYS: SocialContactKey[] = [
+  'email',
+  'linkedIn',
+  'telegram',
+  'instagram',
+  'whatsApp',
+  'viber',
+  'github',
+]
 
 const { t } = useI18n()
 

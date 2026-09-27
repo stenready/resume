@@ -1,8 +1,8 @@
 import { computed, onMounted, ref } from 'vue'
-import { STORAGE_KEYS, THEMES } from '@/constants.js'
+import { STORAGE_KEYS, THEMES, type Theme } from '@/constants'
 
 // starts as light on both server and client so hydration matches; the saved theme is applied on mount
-const theme = ref(THEMES.light)
+const theme = ref<Theme>(THEMES.light)
 
 const getCurrentTheme = computed(() => {
   const isDark = theme.value === THEMES.dark
