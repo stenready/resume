@@ -3,6 +3,7 @@
     data-component-name="BgSkills"
     ref="canvasRef"
     class="bg-skills"
+    :class="{ 'is-raised': isRaised }"
     aria-hidden="true"
   ></canvas>
 </template>
@@ -10,7 +11,14 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import useTheme from '@/use/useTheme'
-import { BACKGROUND_SKILL_GROUPS, type BackgroundSkill } from '@/use/useBg'
+import {
+  BACKGROUND_SKILL_GROUPS,
+  MOBILE_BREAKPOINT,
+  MOBILE_SKILLS_LIMIT,
+  MOBILE_DOCK_SKILLS,
+  dockedSkills,
+  type BackgroundSkill,
+} from '@/use/useBg'
 
 const ICON_VIEWBOX = 24
 const ICON_SIZE_MIN = 26
@@ -46,6 +54,17 @@ const TRAIL_LENGTH = 8
 const TRAIL_WIDTH = 1.5
 const TRAIL_OPACITY = 0.2
 
+const BURST_START_DELAY = 400
+const BURST_STAGGER = 90
+const BURST_FLIGHT_DURATION = 950
+const BURST_LAUNCH_SCALE = 0.4
+const BURST_LIFT = 90
+const BURST_SPREAD = 1.25
+const BURST_TRAIL_OPACITY = 0.55
+const BURST_TRAIL_WIDTH = 2.5
+const BURST_TRAIL_GLOW = 10
+const EASE_BACK_OVERSHOOT = 1.70158
+
 const SCATTER_TOP = 80
 const SCATTER_MARGIN = 60
 const SCATTER_CANDIDATES = 24
@@ -72,9 +91,6 @@ const FLOATING_OPACITY_LIGHT = 0.22
 const FLOATING_OPACITY_DARK = 0.32
 const DOCKED_OPACITY_LIGHT = 0.85
 const DOCKED_OPACITY_DARK = 0.9
-
-const MOBILE_BREAKPOINT = 768
-const MOBILE_SKILLS_LIMIT = 16
 
 const STATE = {
   WAITING: 'waiting',
@@ -122,6 +138,7 @@ interface Particle extends Point {
   trail: Point[]
   pushX: number
   pushY: number
+  dockEl: HTMLElement | null
 }
 
 const canvasRef = ref<HTMLCanvasElement | null>(null)
@@ -135,6 +152,10 @@ let width = 0
 let height = 0
 let reducedMotionQuery: MediaQueryList | null = null
 let columnsMode = false
+// on phones the skills land in the DOM list under the job title instead of side columns
+let dockMode = false
+let dockColor = ''
+const isRaised = ref(false)
 const pointer: Point = { x: -Infinity, y: -Infinity }
 
 const randomBetween = (min: number, max: number) => min + Math.random() * (max - min)
@@ -142,6 +163,8 @@ const clamp01 = (value: number) => Math.min(1, Math.max(0, value))
 
 const easeOutCubic = (t: number) => 1 - (1 - t) ** 3
 const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2)
+const easeOutBack = (t: number) =>
+  1 + (EASE_BACK_OVERSHOOT + 1) * (t - 1) ** 3 + EASE_BACK_OVERSHOOT * (t - 1) ** 2
 
 const quadraticBezier = (from: Point, control: Point, to: Point, t: number): Point => ({
   x: (1 - t) ** 2 * from.x + 2 * (1 - t) * t * control.x + t ** 2 * to.x,
@@ -190,6 +213,16 @@ const measureRowWidth = (particle: Particle) =>
   getRowIconWidth(particle) + Math.max(...particle.rowLines.map(measureText))
 
 const assignSlot = (particle: Particle) => {
+  if (particle.dockEl) {
+    const rect = particle.dockEl.getBoundingClientRect()
+    particle.rowWidth = rect.width
+    particle.slot = {
+      x: rect.left + rect.width / 2,
+      y: rect.top + (rect.height - ROW_ICON_SIZE) / 2,
+    }
+    return
+  }
+
   const gutterWidth = getGutterWidth()
   const edgeX = particle.isLeft ? gutterWidth - COLUMN_GAP : width - gutterWidth + COLUMN_GAP
 
@@ -243,6 +276,7 @@ const createParticle = (skill: BackgroundSkill, isLeft: boolean, columnY: number
   trail: [],
   pushX: 0,
   pushY: 0,
+  dockEl: null,
 })
 
 const createParticles = () => {
@@ -264,6 +298,24 @@ const createParticles = () => {
 
   particles = isNarrow ? allParticles.slice(0, MOBILE_SKILLS_LIMIT) : allParticles
   columnsMode = !isNarrow && hasRoomForColumns(Math.max(columnHeights.left, columnHeights.right))
+  dockMode = isNarrow && attachDockElements()
+}
+
+const attachDockElements = () => {
+  particles.forEach((particle) => {
+    particle.dockEl = document.querySelector<HTMLElement>(
+      `[data-skill-dock="${CSS.escape(particle.label)}"]`,
+    )
+    particle.rowLines = [particle.label]
+  })
+
+  return particles.every(({ dockEl }) => dockEl)
+}
+
+const isIntroMode = () => columnsMode || dockMode
+
+const readDockColor = () => {
+  dockColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()
 }
 
 const randomScatterPoint = (): Point => ({
@@ -303,6 +355,48 @@ const pairScatterPoints = () => {
   rightParticles.forEach((particle, idx) => (particle.scatterPoint = rightPoints[idx]))
 }
 
+const getBurstOrigin = (): Point => {
+  const avatar = document.querySelector<HTMLElement>('[data-skills-origin]')
+  if (!avatar) {
+    return { x: width / 2, y: 0 }
+  }
+
+  const rect = avatar.getBoundingClientRect()
+  return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 }
+}
+
+// a fountain: up and out of the photo first, then down into the list
+const getBurstControl = (from: Point, to: Point): Point => ({
+  x: from.x + (to.x - from.x) * BURST_SPREAD,
+  y: Math.min(from.y, to.y) - BURST_LIFT,
+})
+
+const startBurst = (now: number) => {
+  particles.forEach((particle, order) => {
+    particle.state = STATE.WAITING
+    particle.stateUntil = now + BURST_START_DELAY + order * BURST_STAGGER
+    particle.alpha = 0
+  })
+}
+
+const launchFromAvatar = (particle: Particle, now: number) => {
+  const origin = getBurstOrigin()
+
+  assignSlot(particle)
+  particle.x = origin.x
+  particle.y = origin.y
+  particle.alpha = 1
+  particle.rowness = 1
+  particle.scale = BURST_LAUNCH_SCALE
+  particle.trail = []
+  particle.flight = {
+    from: origin,
+    control: getBurstControl(origin, particle.slot),
+    startTime: now,
+  }
+  particle.state = STATE.FLYING
+}
+
 const startIntro = (now: number) => {
   pairScatterPoints()
 
@@ -340,7 +434,7 @@ const placeInColumns = () => {
 }
 
 const appear = (particle: Particle, now: number) => {
-  const point = columnsMode
+  const point = isIntroMode()
     ? particle.scatterPoint
     : spreadPoints(
         1,
@@ -352,7 +446,7 @@ const appear = (particle: Particle, now: number) => {
   particle.anchorX = point.x
   particle.appearedAt = now
   particle.state = STATE.FLOATING
-  particle.stateUntil = columnsMode
+  particle.stateUntil = isIntroMode()
     ? particle.departAt
     : now + randomBetween(FLOAT_LIFETIME_MIN, FLOAT_LIFETIME_MAX)
 }
@@ -395,9 +489,15 @@ const fly = (particle: Particle, now: number) => {
     return
   }
 
+  if (particle.dockEl) {
+    // the list scrolls with the page, so its position is re-read every frame
+    assignSlot(particle)
+  }
+
   const { from, control, startTime } = particle.flight
-  const t = clamp01((now - startTime) / FLIGHT_DURATION)
-  const point = quadraticBezier(from, control, particle.slot, easeInOutCubic(t))
+  const t = clamp01((now - startTime) / (dockMode ? BURST_FLIGHT_DURATION : FLIGHT_DURATION))
+  const progress = dockMode ? easeOutCubic(t) : easeInOutCubic(t)
+  const point = quadraticBezier(from, control, particle.slot, progress)
 
   particle.trail.push({ x: particle.x, y: particle.y })
   if (particle.trail.length > TRAIL_LENGTH) {
@@ -406,7 +506,13 @@ const fly = (particle: Particle, now: number) => {
 
   particle.x = point.x
   particle.y = point.y
-  particle.rowness = clamp01((t - FLIGHT_MORPH_START) / (1 - FLIGHT_MORPH_START))
+
+  if (dockMode) {
+    // easeOutBack overshoots past 1 near the end, which reads as a springy landing
+    particle.scale = BURST_LAUNCH_SCALE + (1 - BURST_LAUNCH_SCALE) * easeOutBack(t)
+  } else {
+    particle.rowness = clamp01((t - FLIGHT_MORPH_START) / (1 - FLIGHT_MORPH_START))
+  }
 
   if (t >= 1) {
     particle.x = particle.slot.x
@@ -414,6 +520,11 @@ const fly = (particle: Particle, now: number) => {
     particle.flight = null
     particle.trail = []
     particle.state = STATE.DOCKED
+
+    if (particle.dockEl) {
+      particle.alpha = 0
+      dockedSkills.add(particle.label)
+    }
   }
 }
 
@@ -436,7 +547,11 @@ const updateParticle = (particle: Particle, now: number, seconds: number) => {
   switch (particle.state) {
     case STATE.WAITING:
       if (now >= particle.stateUntil) {
-        appear(particle, now)
+        if (dockMode) {
+          launchFromAvatar(particle, now)
+        } else {
+          appear(particle, now)
+        }
       }
       break
 
@@ -447,7 +562,7 @@ const updateParticle = (particle: Particle, now: number, seconds: number) => {
       float(particle, seconds)
 
       if (now >= particle.stateUntil) {
-        if (columnsMode) {
+        if (isIntroMode()) {
           takeOff(particle, now)
         } else {
           particle.state = STATE.LEAVING
@@ -470,7 +585,9 @@ const updateParticle = (particle: Particle, now: number, seconds: number) => {
       break
   }
 
-  applyPointer(particle)
+  if (!dockMode) {
+    applyPointer(particle)
+  }
 }
 
 const drawFloating = (
@@ -527,17 +644,27 @@ const drawRow = (context: CanvasRenderingContext2D, particle: Particle, x: numbe
 
 const drawTrail = (context: CanvasRenderingContext2D, particle: Particle) => {
   const points = [...particle.trail, { x: particle.x, y: particle.y }]
+  const trailOpacity = dockMode ? BURST_TRAIL_OPACITY : TRAIL_OPACITY
+  const trailWidth = dockMode ? BURST_TRAIL_WIDTH : TRAIL_WIDTH
 
+  context.save()
   context.lineCap = 'round'
+  if (dockMode) {
+    context.shadowColor = context.strokeStyle as string
+    context.shadowBlur = BURST_TRAIL_GLOW
+  }
+
   for (let idx = 1; idx < points.length; idx++) {
     const share = idx / points.length
-    context.globalAlpha = TRAIL_OPACITY * share
-    context.lineWidth = TRAIL_WIDTH * share
+    context.globalAlpha = trailOpacity * share
+    context.lineWidth = trailWidth * share
     context.beginPath()
     context.moveTo(points[idx - 1].x, points[idx - 1].y)
     context.lineTo(points[idx].x, points[idx].y)
     context.stroke()
   }
+
+  context.restore()
 }
 
 const draw = () => {
@@ -547,18 +674,19 @@ const draw = () => {
   }
 
   const isDark = getCurrentTheme.value.isDark
-  const floatingOpacity = columnsMode
+  const floatingOpacity = isIntroMode()
     ? isDark
       ? INTRO_OPACITY_DARK
       : INTRO_OPACITY_LIGHT
     : isDark
       ? FLOATING_OPACITY_DARK
       : FLOATING_OPACITY_LIGHT
-  const dockedOpacity = isDark ? DOCKED_OPACITY_DARK : DOCKED_OPACITY_LIGHT
+  const dockedOpacity = dockMode ? 1 : isDark ? DOCKED_OPACITY_DARK : DOCKED_OPACITY_LIGHT
+  const color = dockMode ? dockColor : `rgb(${ACCENT_RGB})`
 
   context.clearRect(0, 0, width, height)
-  context.fillStyle = `rgb(${ACCENT_RGB})`
-  context.strokeStyle = `rgb(${ACCENT_RGB})`
+  context.fillStyle = color
+  context.strokeStyle = color
 
   particles.forEach((particle) => {
     if (particle.alpha <= 0) {
@@ -589,7 +717,16 @@ const draw = () => {
   context.globalAlpha = 1
 }
 
-const hasAssembled = () => columnsMode && particles.every(({ state }) => state === STATE.DOCKED)
+const hasAssembled = () => isIntroMode() && particles.every(({ state }) => state === STATE.DOCKED)
+
+const placeDocked = () => {
+  particles.forEach((particle) => {
+    particle.alpha = 0
+    particle.state = STATE.DOCKED
+    dockedSkills.add(particle.label)
+  })
+  isRaised.value = false
+}
 
 const tick = (now: number) => {
   const seconds = lastFrameTime === null ? 0 : (now - lastFrameTime) / 1000
@@ -597,11 +734,20 @@ const tick = (now: number) => {
 
   particles.forEach((particle) => updateParticle(particle, now, seconds))
   draw()
+
+  if (dockMode && hasAssembled()) {
+    rafId = null
+    isRaised.value = false
+    return
+  }
+
   rafId = requestAnimationFrame(tick)
 }
 
 const showStill = () => {
-  if (columnsMode) {
+  if (dockMode) {
+    placeDocked()
+  } else if (columnsMode) {
     placeInColumns()
   } else {
     const points = spreadPoints(particles.length)
@@ -637,14 +783,20 @@ const stop = () => {
 
 const restart = () => {
   stop()
+  dockedSkills.clear()
   createParticles()
+  readDockColor()
 
   const now = performance.now()
-  if (columnsMode) {
+  if (dockMode) {
+    startBurst(now)
+  } else if (isIntroMode()) {
     startIntro(now)
   } else {
     startFloating(now)
   }
+
+  isRaised.value = dockMode
 
   start()
 }
@@ -667,6 +819,8 @@ const onResize = () => {
 
   if (columnsMode) {
     placeInColumns()
+  } else if (dockMode) {
+    placeDocked()
   } else {
     startFloating(performance.now())
   }
@@ -691,7 +845,12 @@ const onVisibilityChange = () => (document.hidden ? stop() : start())
 watch(
   () => getCurrentTheme.value.isDark,
   () => {
-    if (ctx && rafId === null) {
+    if (!ctx) {
+      return
+    }
+
+    readDockColor()
+    if (rafId === null) {
       draw()
     }
   },
@@ -700,6 +859,7 @@ watch(
 onMounted(() => {
   ctx = canvasRef.value?.getContext('2d') ?? null
   if (!ctx) {
+    MOBILE_DOCK_SKILLS.forEach(({ label }) => dockedSkills.add(label))
     return
   }
 
@@ -732,5 +892,10 @@ onBeforeUnmount(() => {
   width: 100%;
   height: 100%;
   pointer-events: none;
+
+  // while skills fly into the list under the job title they must pass over the content
+  &.is-raised {
+    z-index: 2;
+  }
 }
 </style>

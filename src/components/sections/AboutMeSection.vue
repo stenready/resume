@@ -6,6 +6,8 @@
 
         <p class="job-title">{{ t('jobTitle') }} · Vue.js 2/3 · Nuxt.js 2/3</p>
 
+        <SkillsDock />
+
         <ul class="meta-list">
           <li class="meta-item">{{ t('yearsOfExperience') }}</li>
           <li class="meta-item">{{ t('location') }}</li>
@@ -66,6 +68,7 @@
       <div class="my-avatar">
         <img
           class="img-avatar"
+          data-skills-origin
           :alt="`${t('fullName')} — ${t('jobTitle')}`"
           src="/images/avatar.webp"
           width="192"
@@ -136,6 +139,7 @@ import {
   type SocialContactKey,
 } from '@/constants'
 import BaseButton from '@/components/app/BaseButton.vue'
+import SkillsDock from '@/components/app/SkillsDock.vue'
 
 const { t, locale } = useI18n()
 

@@ -1,3 +1,5 @@
+import { reactive } from 'vue'
+
 // icons: https://simpleicons.org
 export interface BackgroundSkill {
   label: string
@@ -139,3 +141,14 @@ export const BACKGROUND_SKILL_GROUPS: BackgroundSkillGroup[] = [
     ],
   },
 ]
+
+// must stay in sync with the `max-width: 767px` media query in SkillsDock.vue
+export const MOBILE_BREAKPOINT = 768
+export const MOBILE_SKILLS_LIMIT = 16
+
+export const MOBILE_DOCK_SKILLS = BACKGROUND_SKILL_GROUPS.flatMap(({ skills }) => skills).slice(
+  0,
+  MOBILE_SKILLS_LIMIT,
+)
+
+export const dockedSkills = reactive(new Set<string>())
