@@ -16,6 +16,10 @@
         <ProjectsSection />
       </section>
 
+      <section :id="SECTIONS_NAMES.PUBLIC_PROJECTS">
+        <PublicProjectsSection />
+      </section>
+
       <section :id="SECTIONS_NAMES.SKILLS">
         <SkillsSection />
       </section>
@@ -41,6 +45,7 @@ import TheFooter from '@/components/the/TheFooter.vue'
 import AboutMeSection from '@/components/sections/AboutMeSection.vue'
 import ExperienceSection from '@/components/sections/ExperienceSection.vue'
 import ProjectsSection from '@/components/sections/ProjectsSection.vue'
+import PublicProjectsSection from '@/components/sections/PublicProjectsSection.vue'
 import SkillsSection from '@/components/sections/SkillsSection.vue'
 import ArticlesSection from '@/components/sections/ArticlesSection.vue'
 import ContactsSection from '@/components/sections/ContactsSection.vue'

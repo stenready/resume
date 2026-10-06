@@ -3,7 +3,6 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig, type Plugin } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
-import svgLoader from 'vite-svg-loader'
 
 const GOATCOUNTER_ENDPOINT = 'https://sten-ready.goatcounter.com/count'
 
@@ -25,7 +24,7 @@ const goatCounter = (): Plugin => ({
 
 // https://vite.dev/config/
 export default defineConfig(({ isSsrBuild }) => ({
-  plugins: [vue(), vueDevTools(), svgLoader(), goatCounter()],
+  plugins: [vue(), vueDevTools(), goatCounter()],
   base: './',
   build: {
     outDir: 'dist',

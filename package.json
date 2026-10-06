@@ -17,7 +17,6 @@
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/vue-fontawesome": "^3.0.8",
     "modern-normalize": "^3.0.1",
-    "vite-svg-loader": "^5.1.0",
     "vue": "^3.5.17",
     "vue-i18n": "^9.14.4"
   },

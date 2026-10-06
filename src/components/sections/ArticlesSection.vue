@@ -7,12 +7,7 @@
     </h2>
 
     <ul class="articles-list">
-      <li
-        v-for="article of ARTICLES"
-        :key="article.id"
-        class="article-item"
-        :class="{ featured: article.featured }"
-      >
+      <li v-for="article of ARTICLES" :key="article.id" class="article-item">
         <a :href="article.link" target="_blank" rel="noopener noreferrer" class="article-link">
           <img
             v-if="article.img"
@@ -46,15 +41,22 @@ import Article1 from '/public/images/article1.webp'
 import Article2 from '/public/images/article2.webp'
 import Article3 from '/public/images/article3.webp'
 import Article4 from '/public/images/article4.webp'
+import Article6 from '/public/images/article6.webp'
 
 const { t, locale } = useI18n()
 
 const ARTICLES = [
   {
+    id: 'bulgarian-barbershop',
+    titleKey: 'article6',
+    date: '2026-10-06',
+    img: Article6,
+    link: 'https://www.linkedin.com/feed/update/urn:li:activity:7513328107353776130/',
+  },
+  {
     id: 'djinni-validation',
     titleKey: 'article5',
     date: '2026-09-12',
-    featured: true,
     coverIcon: 'fa-solid fa-shield-halved',
     link: 'https://www.linkedin.com/feed/update/urn:li:activity:7504454763992977408/',
   },
@@ -156,10 +158,6 @@ $imageHeight: 200px;
     background: linear-gradient(135deg, var(--accent), var(--accent2));
     color: var(--white);
     font-size: 4rem;
-  }
-
-  .featured {
-    grid-column: 1 / -1;
   }
 
   .article-body {

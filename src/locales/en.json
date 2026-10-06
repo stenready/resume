@@ -49,6 +49,25 @@
   "downloadResume": "Download Resume",
   "techStack": "Technologies",
   "projects": "Key projects",
+  "publicProjects": "Public projects",
+  "inDevelopment": "In development",
+  "publicProjectItems": {
+    "planetaKino": {
+      "meta": "Planeta Kino · Lead Frontend · since 2022",
+      "title": "planetakino.ua",
+      "summary": "Public website of a 12-location cinema chain: showtimes and online ticket sales with LiqPay. SSR and technical SEO in Nuxt.js, PageSpeed 90+ on key pages."
+    },
+    "barbershop": {
+      "meta": "Freelance · 2026",
+      "title": "Krasnodar Academy & Barbershop",
+      "summary": "Website for a barbershop and barber academy in Burgas, Bulgaria: 4 languages, online booking, Umami analytics and Google Ads conversions. The owner edits content himself with Claude. PageSpeed 96 on mobile."
+    },
+    "englishApp": {
+      "meta": "Pet project",
+      "title": "English App",
+      "summary": "An app for learning English that I build in public: the source code is open on GitHub, progress updates go to LinkedIn."
+    }
+  },
   "projectResult": "Result",
   "showAllBullets": "Show all ({n})",
   "showLessBullets": "Show less",
@@ -57,6 +76,7 @@
   "article3": "Introduction to Reactivity in JavaScript: Proxy vs Object.defineProperty",
   "article4": "Why OOP and SOLID Matter in JavaScript World?",
   "article5": "Force-changing my country on Djinni: why validation must live on the backend too",
+  "article6": "A Website for a Bulgarian Barbershop, or How to Get Free Haircuts in Europe",
   "writeMeMessage": "Open to Frontend roles — remote, hybrid, on-site or relocation. The fastest way to reach me is email or Telegram.",
   "footerText": "© {year} Stanislav Radchenko",
   "projectItems": {

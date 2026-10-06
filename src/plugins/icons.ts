@@ -10,6 +10,8 @@ import {
   faGaugeHigh,
   faLayerGroup,
   faShieldHalved,
+  faGlobe,
+  faLanguage,
 } from '@fortawesome/free-solid-svg-icons'
 import {
   faLinkedin,
@@ -22,6 +24,8 @@ import {
 } from '@fortawesome/free-brands-svg-icons'
 
 library.add(
+  faGlobe,
+  faLanguage,
   faGithub,
   faShieldHalved,
   faLayerGroup,

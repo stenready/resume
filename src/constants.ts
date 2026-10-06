@@ -14,6 +14,7 @@ export const SECTIONS_NAMES = {
   ABOUT_ME: 'about',
   EXPERIENCE: 'experience',
   PROJECTS: 'projects',
+  PUBLIC_PROJECTS: 'public-projects',
   SKILLS: 'skills',
   ARTICLES: 'articles',
   CONTACTS: 'contacts',
