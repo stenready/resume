@@ -4,15 +4,6 @@
     class="centered-auto d-flex align-items-center justify-between TheHeader"
     :class="{ 'is-scrolled': isScrolled }"
   >
-    <a
-      :href="`#${SECTIONS_NAMES.ABOUT_ME}`"
-      class="link-logo"
-      :title="t('logo')"
-      @click="onNavigate(SECTIONS_NAMES.ABOUT_ME)"
-      ><span aria-hidden="true">&lt;SR/&gt;</span
-      ><span class="visually-hidden">{{ t('logo') }}</span></a
-    >
-
     <nav class="nav" :aria-label="t('mainNavigation')" ref="navRef">
       <ul class="nav-container d-flex align-items-center">
         <li v-for="menuListItem of menuListItems" :key="menuListItem.id" class="nav-item">
@@ -176,31 +167,6 @@ $headerMinSidePadding: 1rem;
     border-bottom-color: color-mix(in srgb, var(--border) $headerBorderOpacity, transparent);
     background: color-mix(in srgb, var(--bg-color) $headerGlassOpacity, transparent);
     backdrop-filter: blur($headerGlassBlur);
-  }
-
-  .link-logo {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    height: $headerLogoHeight;
-    padding: 0 0.6rem;
-    border-radius: 0.6rem;
-    background: var(--accent);
-    color: var(--on-accent);
-    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    font-size: 0.95rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    text-decoration: none;
-    transition:
-      background-color 0.2s ease,
-      transform 0.2s ease;
-
-    &:hover {
-      background: var(--accent2);
-      transform: translateY(-1px);
-    }
   }
 
   .nav {
